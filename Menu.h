@@ -2,9 +2,14 @@
 #include <iostream>
 using namespace std;
 
-class Menu {
+class Menu{
 public:
-  static void displayOptions();
+// void addVehicle(){};
+// void removeVehicle();
+// void searchForCar();
+// void searchForBike();
+// void sortByRegistration();
+// void sortByCostPerDay();
+// void exit();
 
-private:
 };

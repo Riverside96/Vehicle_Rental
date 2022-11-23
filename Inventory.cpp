@@ -1,10 +1,16 @@
 #include "Inventory.h"
+#include "Car.h"
 #include "dateHelpers.h"
+#include <bits/ranges_algo.h>
 #include <iostream>
+#include <iterator>
 #include <regex>
 #include <string>
+#include <algorithm>
+#include <utility>
 using namespace std;
 //const int OLDEST_VALID_VEHICLE_YYYY = 1940;
+
 
 
   // we could maybe just private class member here instead  of passing in a reference 
@@ -69,8 +75,15 @@ string Inventory::dateIntsToString(int day, int month, int year){
 
   
 
-
+  
   void Inventory::addVehicle(){
+
+
+    // std::vector<int> nums{3, 4, 2, 8, 15, 267};
+    // auto List<auto> guess{"hey", 3};
+    // // ranges::for_each(as_const(nums), print);
+    // auto print = [](const auto& n) { cout << n ;};
+    // for_each(nums.begin(), nums.end(), print);
 
 
   // we could have an overloaded reset that takes a string & a bool or something
@@ -95,47 +108,37 @@ string Inventory::dateIntsToString(int day, int month, int year){
   string answer;
 
 
-  string vehicleType;
-  int wheels;
-  string registration;
-  string dateOfManufacture;
-  string make;
-  string model;
-  int numberOfDoors;
+  // change to this if we are allowed to add boost reflection
+  // struct attributes{
+  // string vehicleType;
+  // int wheels;
+  // string registration;
+  // string dateOfManufacture;
+  // string make;
+  // string model;
+  // int numberOfDoors;
+  // int seats;
+  // int engineCC;
+  // };
+  // attributes temp;
+
   
+  int numOfWheels, numOfDoors, seats, engineCC;
+  string vehicleType, registration, dateOfManufacture, make, model; 
+
+  
+  // could add a if b is entered, jump back to last question method later 
   cout << "You may now enter the vehicle details" << endl;
   cout << "you may quit at any point during registration " << 
           "by entering q at any of the following prompts" << endl;
 
 
     // add a generic function that prompts user if answer is correct ( allows for all data types output)
-
-  cout << "Is the vehicle you would like to add a car? [y/n]: " <<endl;
-  do {
-    cin >> answer;
-    if(isDeciderValid(answer)){
-      if(answer=="n") break;
-      vehicleType = "Car";
-      wheels = 4; break;
-    }else cout << "Invalid input" << endl; 
-  } while (until_break!=broke);   
-
-  cout << "Is the vehicle a motorcycle? [y/n]: " <<endl;
-  do {
-    cin >> answer;
-    if(isDeciderValid(answer)){
-      vehicleType = (answer=="y") ? "Motorcycle" : "Tricycle"; break;
-    } else complain();
-  } while (until_break!=broke);  
-
-   string r = "AR02 AMC";
-
-//dateProduced  reg make 
+  
   // try checking each index is wihtin a range to speed up later // or maybe a faster way to use regex
   cout << "What is the registration of the vehicle?, Ensure caps & space, eg [AA00 AAA]" << endl;
   do {
-    //cin >> answer;
-    // no blank spaces allowed, find out how to limit chars (at a later date if we have time )
+    //cin >> answer; no blank spaces allowed, find out how to limit chars (at a later date if we have time )
     getline(cin, answer);
     if(validateReg(answer)) {
       registration = answer;
@@ -143,25 +146,59 @@ string Inventory::dateIntsToString(int day, int month, int year){
     } else complain();
   } while (until_break!=broke);
 
-
-
   cout << "What is the date of manufacture? [DD/MM/YYYY]" << endl;
   int day, month, year; 
   do{
-  
   cout << "Day: "; cin >> day;
   cout << "Month: "; cin >> month;
   cout << "Year: "; cin >> year;
-  if(!checkdate(day, month, year)) 
-      complain();
-  else {
-      dateOfManufacture = dateIntsToString(day, month, year);
-      break;
-      }
+  if(checkdate(day, month, year)) {
+    dateOfManufacture = dateIntsToString(day, month, year); break;
+    } else complain(); 
   } while (until_break!=broke);
-
-
   
+  cout << "Is the vehicle you would like to add a car? [y/n]: " <<endl;
+  do {
+    cin >> answer;
+    if(isDeciderValid(answer)){
+      vehicleType = (answer == "y") ? "Car" : "Motorcycle"; break;
+    }else cout << "Invalid input" << endl; 
+  } while (until_break!=broke);   
+
+  if (vehicleType == "Car") {
+    cout << "How many doors does the car have ?" <<endl;
+    do {
+      cin >> numOfDoors;
+      if(numOfDoors == 3 || numOfDoors == 5) break;
+      else complain();
+    } while (until_break!=broke);  
+  }
+
+  if (vehicleType == "Motorcycle") {
+    cout << "How many wheels does the motorcycle have?" <<endl;
+    do {
+      cin >> numOfWheels;
+      if(numOfWheels == 2 || numOfWheels == 4) break;
+      else complain();
+    } while (until_break!=broke);  
+  }
+
+  if (vehicleType == "Motorcycle") {
+    cout << "Engine Size?" <<endl;
+    do {
+      cin >> engineCC;
+      if(engineCC == 50 || 
+        engineCC == 125 || 
+        engineCC == 250 ||
+        engineCC == 400 ||
+        engineCC == 600 ||
+        engineCC == 650 ||
+        engineCC == 1000) 
+        break;
+      else complain();
+    } while (until_break!=broke);  
+  }
+
   cout << "Make of the Vehicle? [DD/MM/YYYY]" << endl;
   do {
     cin >> make;
@@ -176,12 +213,28 @@ string Inventory::dateIntsToString(int day, int month, int year){
     else complain(); 
   } while (until_break!=broke);
 
+  if (vehicleType == "Car")
+    do {
+      cout << "How many seats?: ";
+      cin >> seats;
+      if (seats == 2 || seats == 4 || seats == 5){
+        break;
+      } else complain();
+    } while (until_break!=broke); 
+
+  // if (vehicleType == "Motorcycle"){
+  //   bikeMap.insert(make_pair(registration, new Bike(registration, make, model, dateOfManufacture, numOfWheels, engineCC)));
+  // }
+
+  if (vehicleType == "Car") {
+    carMap.insert(make_pair(registration, unique_ptr<Car>(new Car(numOfDoors, seats, registration, make, model, dateOfManufacture))));
+      }
+  
+
+
+  }
 
 
 
 
-cout << dateOfManufacture;
 
-
-
-  };

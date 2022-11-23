@@ -1,13 +1,17 @@
 #pragma once
-using namespace std;
 #include <string>
 #include <iostream>
-class vehicle {
+class Vehicle {
 public:
-  vehicle(string reg, string make, string model, int age);
-  virtual ~vehicle() = default;
+  Vehicle(std::string reg, std::string make, std::string model, std::string dateOfManufacture);
+  virtual ~Vehicle() = default;
   virtual double costPerDay() = 0 ;
-  string getModel();
+
+  std::string getReg();
+  std::string getMake();
+  std::string getModel();
+  std::string getDateOfManufacture();
+
   int getAge();
 protected:
   int age;
@@ -20,8 +24,8 @@ protected:
   void initType();
 private:
   // I think this must be non const to allow for init type func. This breaks encapsulation, how to fix?
-  string type;
-  string const reg, make, model, dateOfManufacture;  
+  std::string type;
+  std::string const reg, make, model, dateOfManufacture;  
   //char make[];
 };
 
