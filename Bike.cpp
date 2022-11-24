@@ -21,3 +21,19 @@ double Bike::costPerDay (){
   return penceToPounds(perDayCostCap(costAsPence));
 };
 
+
+ostream& operator<<(ostream &out, Bike& bike){
+  out << bike.getReg() << ", " 
+      << bike.getMake() << ", " \
+      << bike.getModel() <<", "
+      << bike.getDateOfManufacture()
+      << ", " << bike.numOfWheels << ", "
+      << bike.engineCC << endl;
+  return out;
+};
+
+
+// void Bike::serialize(std::ostream &file, Bike& bike){file << bike;}
+
+
+

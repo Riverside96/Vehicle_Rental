@@ -1,3 +1,4 @@
+#include "Car.h"
 #include "dateHelpers.h"
 #include "Vehicle.h"
 
@@ -10,6 +11,13 @@ string Vehicle::getReg(){return reg;}
 string Vehicle::getMake(){return make;}
 string Vehicle::getModel(){return model;}
 string Vehicle::getDateOfManufacture(){return dateOfManufacture;}
+
+
+
+// void Vehicle::serialize(std::ostream& file){
+
+// };
+
 
 
 void Vehicle::initType(){type = "car";}

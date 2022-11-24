@@ -12,6 +12,15 @@ public:
   int getEngineCC();
 
 
+  friend std::ostream& operator<<(std::ostream &out, Bike& bike);
+  // void serialize(std::ostream &file, Bike& bike);
+
+
+
+  
+
+
+
   double costPerDay();
 
 private:

@@ -11,8 +11,32 @@ public:
   std::string getMake();
   std::string getModel();
   std::string getDateOfManufacture();
-
   int getAge();
+
+
+
+  virtual void serialize(std::ostream& file) = 0;
+
+  // template<std::ostream& file, typename T>
+  // void serialize(T t);
+  //
+  //
+  // template<typename T>
+  // friend std::ostream& operator<<(std::ostream &out, Vehicle& v);
+  // 
+  // template<typename T>
+  //  friend std::ostream& operator<<(std::ostream &out, T derivedPointer);
+
+
+
+
+  // void serialize(std::ostream& file);
+  
+
+
+
+
+
 protected:
   int age;
   int perDayCostCap(int costPD);

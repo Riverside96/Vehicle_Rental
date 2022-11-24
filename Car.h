@@ -8,7 +8,13 @@ public:
   ~Car();
   double costPerDay(); 
 
+
+    
+  // void serialize(std::ostream &file, Car& car);
   friend std::ostream& operator<<(std::ostream &out, Car& car);
+  void serialize(std::ostream& file);
+  
+//void operator+(ostream &file, Car& car);
 
 
 

@@ -21,43 +21,43 @@ using namespace std;
   //fprintf_s(file, )
 
 
-  ifstream readFromFile;
-  string txtToWrite = "";
-  string txtFromFile = "";
-  
+//   ifstream readFromFile;
+//   string txtToWrite = "";
+//   string txtFromFile = "";
+//   
 
 
 
-  void Serializer::save(){
+//   void Serializer::save(){
 
-  ofstream writeToFile;
+//   ofstream writeToFile;
 
-  // carMap.insert(make_pair("AA00 AAA", unique_ptr<Car>(new Car(5, 4, "AA00 AAA", "Skoda", "Fabia", "01/07/1997"))));
+//   // carMap.insert(make_pair("AA00 AAA", unique_ptr<Car>(new Car(5, 4, "AA00 AAA", "Skoda", "Fabia", "01/07/1997"))));
 
-  writeToFile.open("test.txt", ios_base::out | ios_base::trunc);
-  if(writeToFile.is_open()){
+//   writeToFile.open("test.txt", ios_base::out | ios_base::trunc);
+//   if(writeToFile.is_open()){
 
-   for (const auto& t : carMap){
-     writeToFile << *(t.second);
-   }
-    writeToFile.close();
-  }
-};
+//    for (const auto& t : carMap){
+//      writeToFile << *(t.second);
+//    }
+//     writeToFile.close();
+//   }
+// };
 
 
 
-  void Serializer::read(){
-    ifstream readFromFile;
-    readFromFile.open("test.txt", ios_base::in);
-    if(readFromFile.is_open()){
-      while(readFromFile.good()){
-        getline(readFromFile, txtFromFile);
-        cout << txtFromFile << "\n";
-      }
-      readFromFile.close();
-    }
+//   void Serializer::read(){
+//     ifstream readFromFile;
+//     readFromFile.open("test.txt", ios_base::in);
+//     if(readFromFile.is_open()){
+//       while(readFromFile.good()){
+//         getline(readFromFile, txtFromFile);
+//         cout << txtFromFile << "\n";
+//       }
+//       readFromFile.close();
+//     }
 
-  }
+//   }
 
 
 

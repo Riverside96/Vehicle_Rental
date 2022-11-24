@@ -16,8 +16,21 @@ ostream& operator<<(ostream &out, Car& car){
       << ", " << car.numOfDoors << ", "
       << car.numOfSeats << endl;
   return out;
-
 }
+
+
+// void Car::serialize(std::ostream& file){
+//   file + &Car;
+// };
+
+void operator+(ostream &file, Car& car){
+  file << car;
+}
+
+// void Car::serialize(std::ostream &file, Car& car){file << car;};
+
+
+
 
 double Car::costPerDay(){
   int costAsPence = 250 - (age*150) - (numOfDoors*200);
