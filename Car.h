@@ -4,17 +4,19 @@
 #include <iostream>
 class Car: public Vehicle {
 public:
-  Car(int numOfDoors, int numOfSeats, std::string reg, std::string make, std::string model, std::string dateOfManufacture);
+  Car(int numOfDoors, int numOfSeats, std::string reg, std::string make, std::string model, std::string dateOfManufacture) ;
   ~Car();
-  double costPerDay(); 
+  double costPerDay() override; 
 
 
     
   // void serialize(std::ostream &file, Car& car);
   friend std::ostream& operator<<(std::ostream &out, Car& car);
-  void serialize(std::ostream& file);
-  
-//void operator+(ostream &file, Car& car);
+
+
+  // void serialize(std::ostream& file) const override;
+  // 
+  // friend std::ostream& operator+(std::ostream &file, Car& car);
 
 
 

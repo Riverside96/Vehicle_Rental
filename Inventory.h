@@ -11,7 +11,7 @@
 #include <unordered_map>
 class Inventory{
 public:
-  void add(std::unique_ptr<Vehicle> v);
+  void add(std::unique_ptr<Vehicle> v) ;
   void search(); 
   void sort();
   void serialize(std::ostream& file) const;

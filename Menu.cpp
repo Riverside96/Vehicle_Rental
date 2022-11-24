@@ -11,7 +11,21 @@
 #include <algorithm>
 #include <utility>
 using namespace std;
-//const int OLDEST_VALID_VEHICLE_YYYY = 1940;
+
+
+
+  void Menu::removeVehicle(){cout << "not implemented";};
+  void Menu::searchForCar(){cout << "not implemented";};
+  void Menu::searchForBike(){cout << "not implemented";}; 
+  void Menu::sortByRegistration(){cout << "not implemented";};
+  void Menu::sortByCostPerDay(){ cout << "not implemented";};  
+  void Menu::exit(){cout << "not implemented";}
+  void exit();
+
+
+
+
+
 
 
 
@@ -78,7 +92,7 @@ string Menu::dateIntsToString(int day, int month, int year){
   
 
   
-  void Menu::addVehicle(){
+  void Menu::addVehicle(std::unique_ptr<Inventory> inventory){
 
 
     // std::vector<int> nums{3, 4, 2, 8, 15, 267};
@@ -228,19 +242,24 @@ string Menu::dateIntsToString(int day, int month, int year){
 
 
 
-  // Inventory::add(std::unique_ptr<Vehicle> v)
+
+  //Car(2, 4, "TT00 TTT", "make", "model", "01/07/1996");
 
 
-  // new Car(2, 4, "TT00 TTT", "make", "model", "01/07/1996");
+  if (vehicleType == "Car") {
+    // unique_ptr<Car> temp = make_unique<Car>(numOfDoors, seats, registration, make, model, dateOfManufacture);
+    // unique_ptr<Vehicle> toBase (std::move(temp));
+    inventory->add(make_unique<Car>(numOfDoors, seats, registration, make, model, dateOfManufacture));
+   }
 
 
-  // if (vehicleType == "Car") {
-  //  make_unique<Car>(numOfDoors, seats, registration, make, model, dateOfManufacture);
-  // }
+  if (vehicleType == "Motorcycle"){
+    inventory->add(make_unique<Bike>(registration, make, model, dateOfManufacture, numOfWheels, engineCC));
+    // bikeMap.insert(make_pair(registration, new Bike(registration, make, model, dateOfManufacture, numOfWheels, engineCC)));
+    }
 
-  // if (vehicleType == "Motorcycle"){
-  //   bikeMap.insert(make_pair(registration, new Bike(registration, make, model, dateOfManufacture, numOfWheels, engineCC)));
-  // }
+
+
 
 
   }

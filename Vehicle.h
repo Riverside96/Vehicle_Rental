@@ -15,7 +15,9 @@ public:
 
 
 
-  virtual void serialize(std::ostream& file) = 0;
+  virtual void serialize(std::ostream& file){
+    
+  };
 
   // template<std::ostream& file, typename T>
   // void serialize(T t);

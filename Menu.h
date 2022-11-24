@@ -1,6 +1,7 @@
 // INVENTORY HAS A QUESTION CLASS
 // INVENTORY HAS A SERIALIZER
 #pragma once 
+#include "Inventory.h"
 #include "Vehicle.h"
 #include "Car.h"
 #include "Bike.h"
@@ -12,7 +13,8 @@
 using namespace std;
 class Menu{
 public:
-  static void addVehicle();
+  static void addVehicle(std::unique_ptr<Inventory> inventory);
+  static void removeVehicle();
   static void searchForCar();
   static void searchForBike(); 
   static void sortByRegistration();

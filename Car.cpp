@@ -1,4 +1,5 @@
 #include "Car.h"
+#include "Vehicle.h"
 #include <iostream>
 using namespace std;
 
@@ -9,8 +10,9 @@ Car::~Car(){};
 
 
 ostream& operator<<(ostream &out, Car& car){
-  out << car.getReg() << ", " 
-      << car.getMake() << ", " \
+  out << "Car" 
+      << car.getReg() << ", " 
+      << car.getMake() << ", " 
       << car.getModel() <<", "
       << car.getDateOfManufacture()
       << ", " << car.numOfDoors << ", "
@@ -18,14 +20,16 @@ ostream& operator<<(ostream &out, Car& car){
   return out;
 }
 
+// std::ostream& operator+(std::ostream &file, Car& car){
+//     return file << car;
+//   };
 
-// void Car::serialize(std::ostream& file){
-//   file + &Car;
-// };
+// void Car::serialize(std::ostream& file) const  {
+//    file << this->numOfDoors << this->numOfSeats << 
+//  };
 
-void operator+(ostream &file, Car& car){
-  file << car;
-}
+
+
 
 // void Car::serialize(std::ostream &file, Car& car){file << car;};
 

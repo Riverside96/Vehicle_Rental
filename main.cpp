@@ -12,14 +12,6 @@
 
 
 // add system login with regex
-void addVehicle();
-void removeVehicle();
-void searchForCar();
-void searchForBike();
-void sortByRegistration();
-void sortByCostPerDay();
-void exit();
-
 
 
 
@@ -28,10 +20,12 @@ int main(int argc, char *argv[]) {
    // for (const auto& t : carMap){
    //   cout << *(t.second);
    // }
+  //
+  // //
+  unique_ptr<Inventory> temp = make_unique<Inventory>();
 
 
-
-  //Inventory::addVehicle();
+  Menu::addVehicle(std::move(temp));
 
   // 
   // carMap.insert(make_pair("AA00 AAA", unique_ptr<Car>(new Car(5, 4, "AA00 AAA", "Skoda", "Fabia", "01/07/1997"))));
@@ -42,8 +36,8 @@ int main(int argc, char *argv[]) {
   //carMap.insert(make_pair("AA00 AAA", unique_ptr<Car>(new Car(5, 4, "AA00 AAA", "Skoda", "Fabia", "01/07/1997"))));
 
   
-  Serializer::save();
-  Serializer::read();
+  // Serializer::save();
+  // Serializer::read();
 
 
    // for (const auto& t : carMap){
@@ -52,48 +46,38 @@ int main(int argc, char *argv[]) {
 
 
 
-
-
-
   // Menu::displayOptions();
-  // int option = 0;
-  // do {
-  //   cin >> option;
-  //   switch (option) {
-  //   case 1:
-  //     addVehicle();
-  //     break;
-  //   case 2:
-  //     removeVehicle();
-  //     break;
-  //   case 3:
-  //     searchForCar();
-  //     break;
-  //   case 4:
-  //     searchForBike();
-  //     break;
-  //   case 5:
-  //     sortByRegistration();
-  //     break;
-  //   case 6:
-  //     sortByCostPerDay();
-  //     break;
-  //   case 7:
-  //     exit();
-  //     break;
-  //   }
+  int option = 0;
+  do {
+    cin >> option;
+    switch (option) {
+    case 1:
+        Menu::addVehicle(std::move(temp));
+        break;
+    case 2:
+        Menu::removeVehicle();
+        break;
+    case 3:
+        Menu::searchForCar();
+        break;
+    case 4:
+        Menu::searchForBike();
+         break;
+    case 5:
+        Menu:: sortByRegistration();
+        break;
+    case 6:
+        Menu::sortByCostPerDay();
+        break;
+    case 7:
+        Menu::exit();
+      break;
+    }
 
-  // } while (option != 9);
+  } while (option != 9);
 
 
 
   return 0;
 }
 
-void addVehicle();
-void removeVehicle();
-void searchForCar();
-void searchForBike();
-void sortByRegistration();
-void sortByCostPerDay();
-void exit();
