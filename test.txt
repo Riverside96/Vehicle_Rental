@@ -1,0 +1,4 @@
+Registration: BB00 BBB, Make: make, Model: make, Manufactured: 01/07/1996, Wheels: 4, CC: 125
+
+Registration: CC00 CCC, Make: make, Model: make, Manufactured: 01/07/1996, Seats: 4, Doors: 3
+

@@ -3,6 +3,12 @@
 class Bike: public Vehicle {
 
 
+ virtual void serialize(std::ostream &os) const override {
+    Vehicle::serialize(os);
+    os << "Wheels: " << numOfWheels << ", "
+       << "CC: " << engineCC << "\n";
+  }
+
 
 public:
   Bike(std::string reg, std::string make, std::string model, std::string dateOfManufacture, int numOfWheels, int engineCC);
@@ -10,18 +16,8 @@ public:
 
   int getNumOfWheels();
   int getEngineCC();
+  double costPerDay() override;
 
-
-  friend std::ostream& operator<<(std::ostream &out, Bike& bike);
-  // void serialize(std::ostream &file, Bike& bike);
-
-
-
-  
-
-
-
-  double costPerDay();
 
 private:
   const int numOfWheels;

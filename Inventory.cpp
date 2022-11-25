@@ -1,27 +1,19 @@
 #include "Inventory.h"
-#include "Car.h"
-#include "dateHelpers.h"
-#include <bits/ranges_algo.h>
-#include <iostream>
-#include <iterator>
-#include <regex>
-#include <string>
-#include <algorithm>
-#include <utility>
+// #include "Car.h"
+// #include "dateHelpers.h"
+// #include <string>
 #include "InputValidators.h"
-
+#include <iostream>
+  
   void Inventory::add(std::unique_ptr<Vehicle> vehicle) {
     mapVehiclesByReg[vehicle -> getReg()] = std::move(vehicle);
 };
 
   void Inventory::serialize(std::ostream& file) const {
     for (const auto& [reg, vehicle] : mapVehiclesByReg) {
-      file << vehicle;
+      file << *vehicle;
       file << "\n";
   }
-
-
-
   // void Inventory::serialize(std::ostream& file) const {
   //   for (const auto& [reg, vehicle] : mapVehiclesByReg) {
   //     file << vehicle->getTypeName() << ' ';
@@ -29,38 +21,29 @@
   //     file << "\n";
   // }
 
-
-
 };
   void Inventory::deserialize(std::istream& file) {} ;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  void Inventory::save(){
+  file.open("test.txt", std::ios_base::out | std::ios_base::trunc);
+  if(file.is_open()){
+    serialize(file);
+    file.close();
+   } else {
+    std::cout << "Could not save as database could not be found";
+  }
+}
   // finish tmoz. Too tired
   void Inventory::search(){
-    string reg;
+    std::string reg;
     char answer;
 
-    cout << "enter the reg of the vehicle you would like to view details of: ";
+    std::cout << "enter the reg of the vehicle you would like to view details of: ";
     do{
-      cin >> reg;
+      std::cin >> reg;
       if(!InputValidators::validateReg(reg)){
-        cout << "I can't find that in the database, would you like to try again? [Y/n]";
-        cin >> answer;
+        std::cout << "I can't find that in the database, would you like to try again? [Y/n]";
+        std::cin >> answer;
         if(answer == 'n'){return;}
            } 
      }while (!InputValidators::isDeciderValid(answer));

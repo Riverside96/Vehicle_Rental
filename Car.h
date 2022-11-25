@@ -3,27 +3,17 @@
 #include <ostream>
 #include <iostream>
 class Car: public Vehicle {
+
+ virtual void serialize(std::ostream &os) const override {
+    Vehicle::serialize(os);
+    os << "Seats: " << numOfSeats << ", "
+       << "Doors: " << numOfDoors << "\n";
+  }
+
 public:
-  Car(int numOfDoors, int numOfSeats, std::string reg, std::string make, std::string model, std::string dateOfManufacture) ;
+  Car(std::string reg, std::string make, std::string model, std::string dateOfManufacture, int numOfDoors, int numOfSeats) ;
   ~Car();
   double costPerDay() override; 
-
-
-    
-  // void serialize(std::ostream &file, Car& car);
-  friend std::ostream& operator<<(std::ostream &out, Car& car);
-
-
-  // void serialize(std::ostream& file) const override;
-  // 
-  // friend std::ostream& operator+(std::ostream &file, Car& car);
-
-
-
-// friend std::ostream& operator<<(std::ostream& strm, const car& c){
-//   strm << c.numOfDoors << " " << c.reg << " " << c.make << " " << c.model << " " << c.dateOfManufacture;
-
-
 
 private:
   int numOfDoors;

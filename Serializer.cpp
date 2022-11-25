@@ -1,17 +1,16 @@
-#include "Serializer.h"
-#include "Vehicle.h"
-#include "Car.h"
-#include "Bike.h"
-#include <algorithm>
-#include <iostream>
-#include <fstream>
-#include <memory>
-#include <string.h>
-#include <string>
-#include "Inventory.h"
-#include <iterator>
-#include <map>
-using namespace std;
+// #include "Serializer.h"
+// #include "Vehicle.h"
+// #include "Car.h"
+// #include "Bike.h"
+// #include <algorithm>
+// #include <iostream>
+// #include <fstream>
+// #include <memory>
+// #include <string.h>
+// #include <string>
+// #include "Inventory.h"
+// #include <iterator>
+// #include <map>
 
 
   // carMap.insert(make_pair("BB00 BBB", unique_ptr<Car>(new Car(5, 4, "BB00 BBB ", "Vauxhall", "Astra", "01/07/1994"))));

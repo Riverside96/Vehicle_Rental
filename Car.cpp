@@ -1,40 +1,17 @@
 #include "Car.h"
-#include "Vehicle.h"
-#include <iostream>
-using namespace std;
+// #include "Vehicle.h"
+// #include <iostream>
 
-Car::Car(int numOfDoors, int numOfSeats, string reg, string make, string model, string dateOfManufacture)
-:numOfDoors(numOfDoors), Vehicle(reg, make, model, dateOfManufacture){initType();}
-Car::~Car(){};
+Car::Car(std::string reg, std::string make, std::string model, std::string dateOfManufacture, int numOfDoors, int numOfSeats)
+:Vehicle(reg, make, model, dateOfManufacture), numOfDoors(numOfDoors), numOfSeats(numOfSeats) {initType(); }
 
-
-
-ostream& operator<<(ostream &out, Car& car){
-  out << "Car" 
-      << car.getReg() << ", " 
-      << car.getMake() << ", " 
-      << car.getModel() <<", "
-      << car.getDateOfManufacture()
-      << ", " << car.numOfDoors << ", "
-      << car.numOfSeats << endl;
-  return out;
-}
-
-// std::ostream& operator+(std::ostream &file, Car& car){
-//     return file << car;
-//   };
-
-// void Car::serialize(std::ostream& file) const  {
-//    file << this->numOfDoors << this->numOfSeats << 
-//  };
+// Car::Car(int numOfDoors, int numOfSeats, string reg, string make, string model, string dateOfManufacture)
+// :numOfDoors(numOfDoors), numOfSeats(numOfSeats), Vehicle(reg, make, model, dateOfManufacture){initType();}
 
 
-
-
-// void Car::serialize(std::ostream &file, Car& car){file << car;};
-
-
-
+Car::~Car(){
+  std::cout << "Car with registration : " << getReg() << "destroyed\n";
+};
 
 double Car::costPerDay(){
   int costAsPence = 250 - (age*150) - (numOfDoors*200);

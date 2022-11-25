@@ -2,54 +2,35 @@
 // INVENTORY HAS A SERIALIZER
 #pragma once 
 #include "Inventory.h"
-#include "Vehicle.h"
-#include "Car.h"
-#include "Bike.h"
 #include <list>
-#include <ostream>
-#include <regex>
-#include <string>
-#include <unordered_map>
-using namespace std;
+
 class Menu{
 public:
-  static void addVehicle(std::unique_ptr<Inventory> inventory);
-  static void removeVehicle();
-  static void searchForCar();
-  static void searchForBike(); 
-  static void sortByRegistration();
-  static void sortByCostPerDay();  
-  static void exit();
-
-
+  static void displayOptions();
+  static void addVehicle(std::shared_ptr<Inventory> inventory);
+  static void removeVehicle(std::shared_ptr<Inventory> inventory);
+  static void searchForCar(std::shared_ptr<Inventory> inventory);
+  static void searchForBike(std::shared_ptr<Inventory> Inventory); 
+  static void sortByRegistration(std::shared_ptr<Inventory> inventory);
+  static void sortByCostPerDay(std::shared_ptr <Inventory> inventory);  
+  static void exit(std::shared_ptr<Inventory> inventory);
 
 private:
-
 // should maybe change from const when we have a way for admin to change it 
   static inline constexpr int OLDEST_VALID_VEHICLE_YYYY = 1940;
-  void deciderReset(string &decider);
-  static bool isDeciderValid(string decider);
+  void deciderReset(std::string &decider);
+  static bool isDeciderValid(std::string decider);
   static bool isDeciderValid(char *decider);
   static void decide();
   static void complain();
-  static bool validateReg(string input) ;
+  static bool validateReg(std::string input) ;
   static int getYear();
-  static bool checkdate(int d, int m, int y);
-  static string dateIntsToString(int day, int month, int year); 
-  static bool checkMakeInDatabase(string make);
-  static bool checkModelInDatabase(string model);
+  static std::string dateIntsToString(int day, int month, int year); 
+  static bool checkMakeInDatabase(std::string make);
+  static bool checkModelInDatabase(std::string model);
 
-
-
-  static inline list<Vehicle*> vehicleList;
-  static inline list<Vehicle*>::iterator vehicleListIterator;
+  static inline std::list<Vehicle*> vehicleList;
+  static inline std::list<Vehicle*>::iterator vehicleListIterator;
 
   static void SerializeSave();
-
   };
-
-
-
-// decltype(vehicleMap)::iterator vehicleMapOuterIt;
-
-
