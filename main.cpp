@@ -14,35 +14,48 @@
 #include "Inventory.h"
 int main(int argc, char *argv[]) {
 
-  std::shared_ptr<Inventory> temp = std::make_shared<Inventory>();
+  auto inv = std::make_shared<Inventory>();
+   
 
   int option;
   do {
+  std::cout 
+  << "Vehicle Rental System\n"      
+  << "---------------------\n\n"
+  << "Registration Number"
+  << "    Cost Per Day"
+  << "    Vehicle Type\n"
+  << "-------------------"
+  << "    ------------"
+  << "    ------------\n";
+          
+  inv->displayRegCostPerDayNType();
+  std::cout << "\n";
   Menu::displayOptions();
   option = 0;
     std::cin >> option;
     switch (option) {
     case 1:
-        Menu::addVehicle(temp);
+        Menu::addVehicle(inv);
         // Menu::addVehicle(std::move(temp));
         break;
     case 2:
-        Menu::removeVehicle(temp);
+        Menu::removeVehicle(inv);
         break;
     case 3:
-        Menu::searchForCar(temp);
+        Menu::searchForCar(inv);
         break;
     case 4:
-        Menu::searchForBike(temp);
+        Menu::searchForBike(inv);
          break;
     case 5:
-        Menu:: sortByRegistration(temp);
+        Menu:: sortByRegistration(inv);
         break;
     case 6:
-        Menu::sortByCostPerDay(temp);
+        Menu::sortByCostPerDay(inv);
         break;
     case 9:
-        Menu::exit(temp);
+        Menu::exit(inv);
         // Menu::exit(std::move(temp));
       break;
     }

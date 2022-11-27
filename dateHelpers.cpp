@@ -12,7 +12,7 @@
     int year = ((timePtr->tm_year) +1900);
     return year;
 }
-   int dateHelpers::getYearFromDateString(string ddmmyyyy){
+   int dateHelpers::getYearFromDateString(std::string ddmmyyyy){
 
 //std::regex dateValidator ("^[1-31]{1}[/]{1}[1-12]{1}[/]{1}[1-9]{2}$");
 //bool found = regex_match(testing, dateValidator);

@@ -1,26 +1,56 @@
 #include "Inventory.h"
-// #include "Car.h"
-// #include "dateHelpers.h"
-// #include <string>
 #include "InputValidators.h"
+#include <algorithm>
 #include <iostream>
-  
-  void Inventory::add(std::unique_ptr<Vehicle> vehicle) {
-    mapVehiclesByReg[vehicle -> getReg()] = std::move(vehicle);
+#include <iterator>
+#include <memory>
+#include <vector> 
+#include <memory.h>
+  void Inventory::remove(std::string regToDelete){
+    mapVehiclesByReg.erase(regToDelete);
 };
 
+  
+  bool Inventory::checkKeyExists(std::string reg){
+   return (mapVehiclesByReg.contains(reg)) ? 1 : 0; 
+}; 
+
+ 
+  void Inventory::sort(std::string mod){
+  std::vector<std::shared_ptr<Vehicle>> aux;
+  // std::copy_if(mapVehiclesByReg.begin(), mapVehiclesByReg.end(), aux.begin(), ())
+  //
+
+  aux.reserve(mapVehiclesByReg.size());
+  std::transform(mapVehiclesByReg.begin(), mapVehiclesByReg.end(), std::back_inserter(aux),
+    [](std::pair<std::string, std::shared_ptr<Vehicle>> const &p) {return p.second;});
+
+
+  if (mod == "reg") { std::sort(aux.begin(), aux.end(), compareReg);}
+  if (mod == "costPD") {std::sort(aux.begin(), aux.end(), compareCostPD);}
+  for (const auto& v : aux) {
+    std::cout << *v;
+  }
+ }
+
+  void Inventory::displayRegCostPerDayNType() const{
+    for (const auto& [reg, vehicle] : mapVehiclesByReg) {
+    std::cout << vehicle->getReg();
+    std::cout << "               ";
+    std::cout << "£"<<vehicle->costPerDay();
+    std::cout << "            ";
+    std::cout << vehicle->getTypeName() << "\n";
+  }
+};   
+  void Inventory::add(std::shared_ptr<Vehicle> vehicle) {
+    mapVehiclesByReg[vehicle -> getReg()] = std::move(vehicle);
+};
   void Inventory::serialize(std::ostream& file) const {
     for (const auto& [reg, vehicle] : mapVehiclesByReg) {
+      file << vehicle->getTypeName(); 
       file << *vehicle;
       file << "\n";
   }
-  // void Inventory::serialize(std::ostream& file) const {
-  //   for (const auto& [reg, vehicle] : mapVehiclesByReg) {
-  //     file << vehicle->getTypeName() << ' ';
-  //     vehicle->serialize(file);
-  //     file << "\n";
-  // }
-
 };
   void Inventory::deserialize(std::istream& file) {} ;
 
@@ -49,11 +79,8 @@
      }while (!InputValidators::isDeciderValid(answer));
 }; 
 
-  // use copy_if here
-  // // copy to vec for fast sorting 
-  void Inventory::sort(){
+
 
   
-};
 
 

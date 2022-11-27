@@ -1,4 +1,5 @@
 #include "Car.h"
+#include <ostream>
 // #include "Vehicle.h"
 // #include <iostream>
 
@@ -13,8 +14,12 @@ Car::~Car(){
   std::cout << "Car with registration : " << getReg() << "destroyed\n";
 };
 
+std::string Car::getTypeName() const {
+    return "Car";
+  }
+
 double Car::costPerDay(){
-  int costAsPence = 250 - (age*150) - (numOfDoors*200);
+  int costAsPence = 2500 - (age*150) - (numOfDoors*200);
   return penceToPounds(perDayCostCap(costAsPence));
   
 };

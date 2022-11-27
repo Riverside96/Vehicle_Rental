@@ -19,6 +19,9 @@ public:
   double costPerDay() override;
 
 
+  std::string getTypeName() const override;
+
+
 private:
   const int numOfWheels;
   const int engineCC;

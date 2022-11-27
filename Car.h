@@ -15,6 +15,8 @@ public:
   ~Car();
   double costPerDay() override; 
 
+  std::string getTypeName() const override;
+
 private:
   int numOfDoors;
   int numOfSeats;

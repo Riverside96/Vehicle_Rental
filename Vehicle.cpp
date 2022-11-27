@@ -2,7 +2,7 @@
 #include "dateHelpers.h"
 #include "Vehicle.h"
 
-Vehicle::Vehicle(std::string reg, string make, string model, string dateOfManufacture)
+Vehicle::Vehicle(std::string reg, std::string make, std::string model, std::string dateOfManufacture)
 :reg(reg), make(make), model(model), dateOfManufacture(dateOfManufacture){}
 
 std::string Vehicle::getReg() const {return reg;}
@@ -29,5 +29,6 @@ int Vehicle::getAge(){
   return (dateHelpers::getYear()) - (dateHelpers::getYearFromDateString(dateOfManufacture));
 };
 
-int Vehicle::perDayCostCap(int costPD){costPD = (costPD<10000) ? 10000 : costPD; return costPD;}
+// pass refs in instead
+int Vehicle::perDayCostCap(int costPD){costPD = (costPD<1000) ? 1000 : costPD; return costPD;}
 double Vehicle::penceToPounds(int pence){return (double)pence/100;};
