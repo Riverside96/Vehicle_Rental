@@ -9,6 +9,26 @@
 #include <fstream>
 void Serializer::read(std::shared_ptr<Inventory> inventory){
 
+
+  std::list<std::string> t;
+    t.emplace_back("Vectra");
+    t.emplace_back("Astra");
+    t.emplace_back("Insignia");
+    inventory->addValidModel("Vauxhall",t);
+
+    std::list<std::string> temp2;
+    temp2.emplace_back("Outback");
+    temp2.emplace_back("Forester");
+    temp2.emplace_back("Impreza");
+    inventory->addValidModel("Subaru",temp2);
+
+    std::list<std::string> temp3;
+    temp3.emplace_back("Polo");
+    temp3.emplace_back("Passat");
+    temp3.emplace_back("Scirocco");
+    inventory->addValidModel("VW",temp3);
+  
+
   std::string vehicleType, registration, make, model, manufactured, na, temp;
   int seats, doors, numOfWheels, engineCC;
 

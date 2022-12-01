@@ -2,14 +2,22 @@
 #include <iostream>
 #include "Serializer.h"
 
+
+
 // add system login with regex
 #include "Inventory.h"
 int main(int argc, char *argv[]) {
+
+
   
+
   // Serializer::deleteFile();
   auto inv = std::make_shared<Inventory>();
   Serializer::read(inv);
+
+ 
   int option;
+  std::string menuMod;
   do {
   std::cout 
   << "Vehicle Rental System\n"      
@@ -25,7 +33,8 @@ int main(int argc, char *argv[]) {
 
 
   // inv->displayRegCostPerDayNType();
-  inv->sort();
+  auto sorted = inv->sort(menuMod);
+  inv->displayRegCostPerDayNType(sorted);
 
   std::cout << "\n";
   Menu::displayOptions();
@@ -46,10 +55,12 @@ int main(int argc, char *argv[]) {
         Menu::searchForBike(inv);
          break;
     case 5:
-        Menu:: sortByRegistration(inv);
+        // Menu:: sortByRegistration(inv);
+        menuMod = "reg";
         break;
     case 6:
-        Menu::sortByCostPerDay(inv);
+        // Menu::sortByCostPerDay(inv);
+        menuMod = "costPD";
         break;
     case 9:
         Menu::exit(inv);

@@ -8,6 +8,7 @@
 #include <ios>
 #include <iostream>
 #include <iterator>
+#include <map>
 #include <memory>
 #include <vector> 
 #include <memory.h>
@@ -34,44 +35,81 @@ void Inventory::remove(std::string regToDelete){
 
   // ask sir how to handle it not maintaining it's state after leaving following function
   // it's not destructing as it's displaying. 
-  void Inventory::sort(std::string mod) const{
+  std::vector<std::shared_ptr<Vehicle>>  Inventory::sort(std::string mod) const{
   std::vector<std::shared_ptr<Vehicle>> aux;
-  // std::copy_if(mapVehiclesByReg.begin(), mapVehiclesByReg.end(), aux.begin(), ())
-  //
-
   aux.reserve(mapVehiclesByReg.size());
   std::transform(mapVehiclesByReg.begin(), mapVehiclesByReg.end(), std::back_inserter(aux),
     [](std::pair<std::string, std::shared_ptr<Vehicle>> const &p) {return p.second;});
 
-
   if (mod == "reg") { std::sort(aux.begin(), aux.end(), compareReg);}
   if (mod == "costPD") {std::sort(aux.begin(), aux.end(), compareCostPD);}
-  // for (const auto& v : aux) {
-  //   std::cout << *v;
-  // }
-  // displayRegCostPerDayNType(aux);
-
-  }
+  return aux;
+    }
 
   void Inventory::displayRegCostPerDayNType(std::vector<std::shared_ptr<Vehicle>> aux) const{
-    // for (const auto& [reg, vehicle] : mapVehiclesByReg) {
-    // std::cout << vehicle->getReg();
-    // std::cout << "               ";
-    // std::cout << "£"<<vehicle->costPerDay();
-    // std::cout << "            ";
-    // std::cout << vehicle->getTypeName() << "\n";
-
-    for (const auto& key : aux) {
-      std::cout << key->getReg();
-      std::cout << "               ";
-      std::cout << "£"<<key->costPerDay();
-      std::cout << "            ";
-      std::cout << key->getTypeName() << "\n";
+      for (const auto& key : aux) {
+      std::cout << key->getReg()
+                << "               "
+                << "£"<<key->costPerDay()
+                << "            "
+                << key->getTypeName() << "\n";
   }
 };   
   void Inventory::add(std::shared_ptr<Vehicle> vehicle) {
     mapVehiclesByReg[vehicle -> getReg()] = std::move(vehicle);
 };
+
+  void Inventory::addValidModel(std::string make, std::list<std::string> model){
+    mapValidMakesModels.insert({make, model});
+};
+  void Inventory::printValidModelMap(){
+    for(auto key : mapValidMakesModels){
+      std::cout << "make: "<<key.first << " models:";
+    for(auto value : key.second){
+      std::cout << value << ", ";
+    }
+    std::cout << "\n";  
+  }
+}
+
+  bool Inventory::isMakeInMap(std::string make){
+    return mapValidMakesModels.contains(make) ? true : false; 
+};
+  bool Inventory::isModelInMap(std::string make, std::string model){
+    for (auto value=mapValidMakesModels[make].begin(); value != mapValidMakesModels[make].end(); ++value){
+      if (*value == model) break;
+      return 0;
+  }
+    return 1;
+};
+
+  std::string Inventory::didYouMeanMake(std::string make){
+    int tracker = make.length()+3;
+    std::string lowestLeven;
+
+    for (auto key : mapValidMakesModels){
+    if (InputValidators::levenshteinDistance(key.first, make) < tracker){
+      tracker = (InputValidators::levenshteinDistance(key.first, make));
+      lowestLeven = key.first;
+    }
+  }   
+  return lowestLeven;
+};
+  std::string Inventory::didYouMeanModel(std::string make, std::string model){
+    int tracker = model.length()+3;
+    std::string lowestLeven;
+    for (auto value=mapValidMakesModels[make].begin(); value != mapValidMakesModels[make].end(); ++value){
+      if(InputValidators::levenshteinDistance(*value, model) < tracker){
+        tracker = (InputValidators::levenshteinDistance(*value, model));
+        lowestLeven = *value;
+    }
+  }
+  return lowestLeven;
+};
+
+
+
+
   void Inventory::save() const{
    Serializer::serialize(mapVehiclesByReg);
 }
@@ -91,8 +129,5 @@ void Inventory::remove(std::string regToDelete){
      }while (!InputValidators::isDeciderValid(answer));
 }; 
 
-
-
-  
 
 

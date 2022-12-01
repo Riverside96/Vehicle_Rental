@@ -170,18 +170,33 @@ std::string Menu::dateIntsToString(int day, int month, int year){
     } while (until_break!=broke);  
   }
 
-  std::cout << "Make of the Vehicle? [DD/MM/YYYY]" << std::endl;
+
   do {
+  std::cout << "Make of the Vehicle? [DD/MM/YYYY]" << std::endl;
     std::cin >> make;
-    if (checkMakeInDatabase(make)) break;
-    else complain(); 
+    if (inventory->isMakeInMap(make)) break;
+    else {
+        make = inventory->didYouMeanMake(make);
+        std::cout << "Did you mean " << make << "? [y/n]: ";
+        std::cin >> answer;
+        if(!isDeciderValid(answer)) complain();
+        if(answer=="y") break;
+      }
   } while (until_break!=broke);
 
-  std::cout << "Model of the Vehicle? [DD/MM/YYYY]" << std::endl;
+
   do {
+  std::cout << "Model of the Vehicle? [DD/MM/YYYY]" << std::endl;
     std::cin >> model;
-    if (checkMakeInDatabase(model)) break;
-    else complain(); 
+    // if (checkMakeInDatabase(model)) break;
+    if (inventory->isModelInMap(make, model)) break;
+    else {
+      model = inventory->didYouMeanModel(make, model);
+      std::cout << "Did you mean " << model << " ? [y/n]:  ";
+      std::cin >> answer;
+      if(!isDeciderValid(answer)) complain(); 
+      if(answer == "y") break;
+    }
   } while (until_break!=broke);
 
   if (vehicleType == "Car")
