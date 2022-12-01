@@ -6,8 +6,8 @@ class Car: public Vehicle {
 
  virtual void serialize(std::ostream &os) const override {
     Vehicle::serialize(os);
-    os << "Seats: " << numOfSeats << ", "
-       << "Doors: " << numOfDoors << "\n";
+    os << "Seats: " << numOfSeats << " "
+       << "Doors: " << numOfDoors << " " <<  "\n";
   }
 
 public:

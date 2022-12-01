@@ -1,22 +1,40 @@
 #include "Inventory.h"
+#include "Bike.h"
+#include "Car.h"
 #include "InputValidators.h"
+#include "Serializer.h"
 #include <algorithm>
+#include <dirent.h>
+#include <ios>
 #include <iostream>
 #include <iterator>
 #include <memory>
 #include <vector> 
 #include <memory.h>
-  void Inventory::remove(std::string regToDelete){
+#include <cmath>
+#include <filesystem>
+
+void Inventory::display(){
+  
+}
+
+void Inventory::remove(std::string regToDelete){
+    // auto it = mapVehiclesByReg[regToDelete];
+    // if(it->getTypeName() == "Car")
+    Serializer::deleteFile(regToDelete);
     mapVehiclesByReg.erase(regToDelete);
 };
 
   
-  bool Inventory::checkKeyExists(std::string reg){
+  bool Inventory::checkKeyExists(std::string reg) const{
    return (mapVehiclesByReg.contains(reg)) ? 1 : 0; 
 }; 
 
  
-  void Inventory::sort(std::string mod){
+
+  // ask sir how to handle it not maintaining it's state after leaving following function
+  // it's not destructing as it's displaying. 
+  void Inventory::sort(std::string mod) const{
   std::vector<std::shared_ptr<Vehicle>> aux;
   // std::copy_if(mapVehiclesByReg.begin(), mapVehiclesByReg.end(), aux.begin(), ())
   //
@@ -28,43 +46,37 @@
 
   if (mod == "reg") { std::sort(aux.begin(), aux.end(), compareReg);}
   if (mod == "costPD") {std::sort(aux.begin(), aux.end(), compareCostPD);}
-  for (const auto& v : aux) {
-    std::cout << *v;
-  }
- }
+  // for (const auto& v : aux) {
+  //   std::cout << *v;
+  // }
+  // displayRegCostPerDayNType(aux);
 
-  void Inventory::displayRegCostPerDayNType() const{
-    for (const auto& [reg, vehicle] : mapVehiclesByReg) {
-    std::cout << vehicle->getReg();
-    std::cout << "               ";
-    std::cout << "£"<<vehicle->costPerDay();
-    std::cout << "            ";
-    std::cout << vehicle->getTypeName() << "\n";
+  }
+
+  void Inventory::displayRegCostPerDayNType(std::vector<std::shared_ptr<Vehicle>> aux) const{
+    // for (const auto& [reg, vehicle] : mapVehiclesByReg) {
+    // std::cout << vehicle->getReg();
+    // std::cout << "               ";
+    // std::cout << "£"<<vehicle->costPerDay();
+    // std::cout << "            ";
+    // std::cout << vehicle->getTypeName() << "\n";
+
+    for (const auto& key : aux) {
+      std::cout << key->getReg();
+      std::cout << "               ";
+      std::cout << "£"<<key->costPerDay();
+      std::cout << "            ";
+      std::cout << key->getTypeName() << "\n";
   }
 };   
   void Inventory::add(std::shared_ptr<Vehicle> vehicle) {
     mapVehiclesByReg[vehicle -> getReg()] = std::move(vehicle);
 };
-  void Inventory::serialize(std::ostream& file) const {
-    for (const auto& [reg, vehicle] : mapVehiclesByReg) {
-      file << vehicle->getTypeName(); 
-      file << *vehicle;
-      file << "\n";
-  }
-};
-  void Inventory::deserialize(std::istream& file) {} ;
-
-  void Inventory::save(){
-  file.open("test.txt", std::ios_base::out | std::ios_base::trunc);
-  if(file.is_open()){
-    serialize(file);
-    file.close();
-   } else {
-    std::cout << "Could not save as database could not be found";
-  }
+  void Inventory::save() const{
+   Serializer::serialize(mapVehiclesByReg);
 }
   // finish tmoz. Too tired
-  void Inventory::search(){
+  void Inventory::search() const{
     std::string reg;
     char answer;
 

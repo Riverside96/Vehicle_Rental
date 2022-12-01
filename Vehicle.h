@@ -27,10 +27,10 @@ public:
 
 protected:
   virtual void serialize(std::ostream& os) const{
-    os << "Registration: " << reg << ", "
-       << "Make: " << make << ", "
-       << "Model: " << model <<  ", "
-       << "Manufactured: " << dateOfManufacture << ", ";
+    os << "Registration: " << reg << " "
+       << "Make: " << make << " "
+       << "Model: " << model <<  " "
+       << "Manufactured: " << dateOfManufacture << " ";
   }
 
   int age;
