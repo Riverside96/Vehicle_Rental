@@ -38,8 +38,8 @@
    
    return;
 };
-  std::string mod = "hello";
-  void Menu::searchForCar(std::shared_ptr<Inventory> inventory, std::string mod){
+  // std::string mod = "hello";
+  void Menu::search(std::shared_ptr<Inventory> inventory, std::string mod){
     int opt;
     const int until_break (-1);
     const int broke(1);
@@ -54,15 +54,15 @@
     do{
       std::cout << "Please choose an option: ";
       std::cin >> opt;
-      if(opt!=1 || opt!=2 || opt!=3 || opt!=9)complain();
-      else break;
+      if(opt==1 || opt==2 || opt==3 || opt==9) break;
+      else complain();
     } while (until_break!=broke);    
   inventory->search(mod, opt);
 
     
              
 };
-  void Menu::searchForBike(std::shared_ptr<Inventory> inventory){std::cout << "not implemented\n\n"; return ;}; 
+  // void Menu::searchForBike(std::shared_ptr<Inventory> inventory){std::cout << "not implemented\n\n"; return ;}; 
   // void Menu::sortByRegistration(std::shared_ptr<Inventory> inventory) {inventory->sort("reg");};
   // void Menu::sortByCostPerDay(std::shared_ptr<Inventory> inventory) {inventory->sort("costPd");};  
   void Menu::exit(std::shared_ptr<Inventory> inventory){
@@ -107,6 +107,18 @@ std::string Menu::dateIntsToString(int day, int month, int year){
   return model == "model" ? 1 : 0;
 
 }
+
+
+
+  void Menu::enterReg(){};
+  void Menu::enterManufactureDate(){};
+  void Menu::enterVehicleType(){};
+  void Menu::enterDoors(){};
+  void Menu::enterWheels(){};
+  void Menu::enterEngineSize(){};
+  void Menu::enterMake(){};
+  void Menu::enterModel(){};
+  void Menu::enterSeats(){};
 
 
   void Menu::addVehicle(std::shared_ptr<Inventory> inventory){

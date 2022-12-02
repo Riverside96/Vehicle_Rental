@@ -49,10 +49,10 @@ int main(int argc, char *argv[]) {
         Menu::removeVehicle(inv);
         break;
     case 3:
-        Menu::searchForCar(inv);
+        Menu::search(inv, "car");
         break;
     case 4:
-        Menu::searchForBike(inv);
+        Menu::search(inv, "bike");
          break;
     case 5:
         // Menu:: sortByRegistration(inv);

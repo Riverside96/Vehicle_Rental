@@ -20,8 +20,8 @@ public:
   static void displayOptions();
   static void addVehicle(std::shared_ptr<Inventory> inventory);
   static void removeVehicle(std::shared_ptr<Inventory> inventory);
-  static void searchForCar(std::shared_ptr<Inventory> inventory, std::string mod);
-  static void searchForBike(std::shared_ptr<Inventory> Inventory); 
+  static void search(std::shared_ptr<Inventory> inventory, std::string mod);
+  // static void searchForBike(std::shared_ptr<Inventory> Inventory); 
   static void sortByRegistration(std::shared_ptr<Inventory> inventory);
   static void sortByCostPerDay(std::shared_ptr <Inventory> inventory);  
   static void exit(std::shared_ptr<Inventory> inventory);
