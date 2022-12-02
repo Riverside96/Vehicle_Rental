@@ -59,8 +59,6 @@
     } while (until_break!=broke);    
   inventory->search(mod, opt);
 
-    
-             
 };
   // void Menu::searchForBike(std::shared_ptr<Inventory> inventory){std::cout << "not implemented\n\n"; return ;}; 
   // void Menu::sortByRegistration(std::shared_ptr<Inventory> inventory) {inventory->sort("reg");};
@@ -80,16 +78,13 @@
     std::cout << "Invalid Input" << std::endl;;
   };
 
-
   bool Menu::validateReg(std::string input){
   std::regex carRegRegex ("^[A-Z]{2}[0-9]{2}\\s[A-Z]{3}$");
   //return bool (regex_match(input, carRegRegex)) ? false : true;
-  std::smatch match; // dont think this is necassaRY
+  // std::smatch match; // dont think this is necassaRY
   bool found = regex_match(input, carRegRegex);
   return found;
 };
-
-
 
 std::string Menu::dateIntsToString(int day, int month, int year){
   std::ostringstream date;
@@ -105,91 +100,64 @@ std::string Menu::dateIntsToString(int day, int month, int year){
 }
  bool Menu::checkModelInDatabase(std::string model){
   return model == "model" ? 1 : 0;
-
 }
 
+  void Menu::enterReg(std::string &registration, std::string &answer){
+    bool broke(0);
+    do {
+      //cin >> answer; no blank spaces allowed, find out how to limit chars (at a later date if we have time )
+      getline(std::cin, answer);
+      if(validateReg(answer)) {
+        registration = answer;
+        broke=1; break;
+      } else complain();
+    } while (!broke);
 
-
-  void Menu::enterReg(){};
-  void Menu::enterManufactureDate(){};
-  void Menu::enterVehicleType(){};
-  void Menu::enterDoors(){};
-  void Menu::enterWheels(){};
-  void Menu::enterEngineSize(){};
-  void Menu::enterMake(){};
-  void Menu::enterModel(){};
-  void Menu::enterSeats(){};
-
-
-  void Menu::addVehicle(std::shared_ptr<Inventory> inventory){
-  std::cin.ignore();
-  const int until_break (-1);
-  const int broke(1);
-  std::string answer;
-
-
-  int numOfWheels, numOfDoors, seats, engineCC;
-  std::string vehicleType, registration, dateOfManufacture, make, model; 
-
-
-  // could add a if b is entered, jump back to last question method later 
-  std::cout << "\n\nYou may now enter the vehicle details\n";
-  std::cout << "you may quit at any point during registration " << 
-          "by entering q at any of the following prompts\n\n";
-
-
-    // add a generic function that prompts user if answer is correct ( allows for all data types output)
-
-  // try checking each index is wihtin a range to speed up later // or maybe a faster way to use regex
-  std::cout << "What is the registration of the vehicle?, Ensure caps & space, eg [AA00 AAA]\n";
-  do {
-    //cin >> answer; no blank spaces allowed, find out how to limit chars (at a later date if we have time )
-    getline(std::cin, answer);
-    if(validateReg(answer)) {
-      registration = answer;
-      break;
-    } else complain();
-  } while (until_break!=broke);
-
-  std::cout << "What is the date of manufacture? [DD/MM/YYYY]" << std::endl;
-  int day, month, year; 
+};
+// fix infin loop when entering letters instead of ints
+// also should be shorts not ints probs
+  void Menu::enterManufactureDate(std::string &dateOfManufacture){
+    bool broke(0);
+    int day, month, year;
   do{
   std::cout << "Day: "; std::cin >> day;
   std::cout << "Month: "; std::cin >> month;
   std::cout << "Year: "; std::cin >> year;
   if(dateHelpers::checkdate(day, month, year, OLDEST_VALID_VEHICLE_YYYY)) {
-    dateOfManufacture = dateIntsToString(day, month, year); break;
+    dateOfManufacture = dateIntsToString(day, month, year); broke=1; break;
     } else complain(); 
-  } while (until_break!=broke);
+  } while (!broke);
+};
 
-  std::cout << "Is the vehicle you would like to add a car? [y/n]: " <<std::endl;
-  do {
-    std::cin >> answer;
-    if(isDeciderValid(answer)){
-      vehicleType = (answer == "y") ? "Car" : "Motorcycle"; break;
-    }else std::cout << "Invalid input" << std::endl; 
-  } while (until_break!=broke);   
+  void Menu::enterVehicleType(std::string &vehicleType, std::string &answer){
+    bool broke(0);
+    do {
+      std::cin >> answer;
+      if(isDeciderValid(answer)){
+        vehicleType = (answer == "y") ? "Car" : "Motorcycle"; broke=1; break; 
+      }else complain(); 
+  } while (!broke);   
+};
 
-  if (vehicleType == "Car") {
-    std::cout << "How many doors does the car have ?" <<std::endl;
+  void Menu::enterDoors(int &numOfDoors){
+    bool broke(0);
     do {
       std::cin >> numOfDoors;
-      if(numOfDoors == 3 || numOfDoors == 5) break;
-      else complain();
-    } while (until_break!=broke);  
-  }
+      if(numOfDoors == 3 || numOfDoors == 5) broke=1; break;
+      complain();
+    } while (!broke);  
 
-  if (vehicleType == "Motorcycle") {
-    std::cout << "How many wheels does the motorcycle have?" <<std::endl;
+};
+  void Menu::enterWheels(int &numOfWheels){
+    bool broke(0); 
     do {
       std::cin >> numOfWheels;
-      if(numOfWheels == 2 || numOfWheels == 3) break;
-      else complain();
-    } while (until_break!=broke);  
-  }
-
-  if (vehicleType == "Motorcycle") {
-    std::cout << "Engine Size?" <<std::endl;
+      if(numOfWheels == 2 || numOfWheels == 3) broke=1; break;
+      complain();
+    } while (!broke);  
+};
+  void Menu::enterEngineSize(int &engineCC){
+    bool broke(0);
     do {
       std::cin >> engineCC;
       if(engineCC == 50 || 
@@ -198,29 +166,29 @@ std::string Menu::dateIntsToString(int day, int month, int year){
         engineCC == 400 ||
         engineCC == 600 ||
         engineCC == 650 ||
-        engineCC == 1000) 
+        engineCC == 1000){
+        broke = 1; 
         break;
-      else complain();
-    } while (until_break!=broke);  
-  }
-
-
+     }else complain();
+    } while (!broke);  
+};
+  void Menu::enterMake(std::string &make, auto &inventory, std::string &answer){
+    bool broke(0);
+    do {
+      std::cin >> make;
+      if (inventory->isMakeInMap(make)) break;
+      else {
+          make = inventory->didYouMeanMake(make);
+          std::cout << "Did you mean " << make << "? [y/n]: ";
+          std::cin >> answer;
+          if(!isDeciderValid(answer)) complain();
+          if(answer=="y") broke=1; break;
+        }
+  } while (!broke);
+};
+  void Menu::enterModel(std::string &make, std::string &model, std::string &answer, auto &inventory){
+  bool broke(0);
   do {
-  std::cout << "Make of the Vehicle? [DD/MM/YYYY]" << std::endl;
-    std::cin >> make;
-    if (inventory->isMakeInMap(make)) break;
-    else {
-        make = inventory->didYouMeanMake(make);
-        std::cout << "Did you mean " << make << "? [y/n]: ";
-        std::cin >> answer;
-        if(!isDeciderValid(answer)) complain();
-        if(answer=="y") break;
-      }
-  } while (until_break!=broke);
-
-
-  do {
-  std::cout << "Model of the Vehicle? [DD/MM/YYYY]" << std::endl;
     std::cin >> model;
     // if (checkMakeInDatabase(model)) break;
     if (inventory->isModelInMap(make, model)) break;
@@ -229,20 +197,69 @@ std::string Menu::dateIntsToString(int day, int month, int year){
       std::cout << "Did you mean " << model << " ? [y/n]:  ";
       std::cin >> answer;
       if(!isDeciderValid(answer)) complain(); 
-      if(answer == "y") break;
+      if(answer == "y") broke=1;
     }
-  } while (until_break!=broke);
+  } while (!broke);
+};
 
-  if (vehicleType == "Car")
-    do {
-      std::cout << "How many seats?: ";
-      std::cin >> seats;
-      if (seats == 2 || seats == 4 || seats == 5){
-        break;
-      } else complain();
-    } while (until_break!=broke); 
+  void Menu::enterSeats(int &seats){
+  bool broke(0);
+  do{
+    std::cin >> seats;
+    if (seats == 2 || seats == 4 || seats == 5){
+      broke=1;;
+    } else complain();
+  }while (!broke); 
+};
 
- if (vehicleType == "Car") {
+  void Menu::addVehicle(std::shared_ptr<Inventory> inventory){
+  std::cin.ignore();
+  // const int until_break (-1);
+  // const int broke(1);
+  std::string answer;
+
+  int numOfWheels, numOfDoors, seats, engineCC;
+  std::string vehicleType, registration, dateOfManufacture, make, model; 
+
+  // could add a if b is entered, jump back to last question method later 
+  std::cout << "\n\nYou may now enter the vehicle details\n";
+  std::cout << "you may quit at any point during registration " << 
+          "by entering q at any of the following prompts\n\n";
+
+
+    // add a generic function that prompts user if answer is correct ( allows for all data types output)
+  // try checking each index is wihtin a range to speed up later // or maybe a faster way to use regex
+  std::cout << "What is the registration of the vehicle?, Ensure caps & space, eg [AA00 AAA]\n";
+  enterReg(registration, answer);
+
+  std::cout << "What is the date of manufacture? [DD/MM/YYYY]" << std::endl;
+  enterManufactureDate(dateOfManufacture);
+ 
+  std::cout << "Is the vehicle you would like to add a car? [y/n]: " <<std::endl;
+  enterVehicleType(vehicleType, answer);
+
+   if (vehicleType == "Car") {
+    std::cout << "How many doors does the car have ?" <<std::endl;
+    enterDoors(numOfDoors);
+  }
+     if (vehicleType == "Motorcycle") {
+    std::cout << "How many wheels does the motorcycle have?" <<std::endl;
+    enterWheels(numOfWheels);
+  }
+   if (vehicleType == "Motorcycle") {
+    std::cout << "Engine Size?" <<std::endl;
+    enterEngineSize(engineCC);
+  }
+  std::cout << "Make of the Vehicle? [DD/MM/YYYY]" << std::endl;
+  enterMake(make, inventory, answer);
+
+  std::cout << "Model of the Vehicle? [DD/MM/YYYY]" << std::endl;\
+  enterModel(make, model, answer, inventory);
+   if (vehicleType == "Car"){
+    std::cout << "How many seats?: ";
+    enterSeats(seats);
+  }
+    if (vehicleType == "Car") {
     // inventory->add(make_unique<Car>(numOfDoors, seats, registration, make, model, dateOfManufacture));
     inventory->add(make_unique<Car>(registration, make, model, dateOfManufacture, numOfDoors, seats));
    }

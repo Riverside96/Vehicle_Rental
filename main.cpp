@@ -1,21 +1,13 @@
 #include "Menu.h"
 #include <iostream>
 #include "Serializer.h"
-
-
-
-// add system login with regex
 #include "Inventory.h"
 int main(int argc, char *argv[]) {
-
-
-  
 
   // Serializer::deleteFile();
   auto inv = std::make_shared<Inventory>();
   Serializer::read(inv);
 
- 
   int option;
   std::string menuMod;
   do {
@@ -29,10 +21,6 @@ int main(int argc, char *argv[]) {
   << "    ------------"
   << "    ------------\n";
     
-  // this is the next mish to suss.
-
-
-  // inv->displayRegCostPerDayNType();
   auto sorted = inv->sort(menuMod);
   inv->displayRegCostPerDayNType(sorted);
 
@@ -43,7 +31,6 @@ int main(int argc, char *argv[]) {
     switch (option) {
     case 1:
         Menu::addVehicle(inv);
-        // Menu::addVehicle(std::move(temp));
         break;
     case 2:
         Menu::removeVehicle(inv);
@@ -55,11 +42,9 @@ int main(int argc, char *argv[]) {
         Menu::search(inv, "bike");
          break;
     case 5:
-        // Menu:: sortByRegistration(inv);
         menuMod = "reg";
         break;
     case 6:
-        // Menu::sortByCostPerDay(inv);
         menuMod = "costPD";
         break;
     case 9:

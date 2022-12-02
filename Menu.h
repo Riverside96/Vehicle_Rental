@@ -7,15 +7,15 @@
 class Menu{
 public:
 
-  static void enterReg();
-  static void enterManufactureDate();
-  static void enterVehicleType();
-  static void enterDoors();
-  static void enterWheels();
-  static void enterEngineSize();
-  static void enterMake();
-  static void enterModel();
-  static void enterSeats();
+  static void enterReg(std::string &registration, std::string &answer);
+  static void enterManufactureDate(std::string &dateOfManufacture);
+  static void enterVehicleType(std::string &vehicleType, std::string &answer);
+  static void enterDoors(int &numOfDoors);
+  static void enterWheels(int &numOfWheels);
+  static void enterEngineSize(int &engineCC);
+  static void enterMake(std::string &make, auto &inventory, std::string &answer);
+  static void enterModel(std::string &make, std::string &model, std::string &answer, auto &inventory);
+  static void enterSeats(int &seats);
 
   static void displayOptions();
   static void addVehicle(std::shared_ptr<Inventory> inventory);

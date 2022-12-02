@@ -21,9 +21,6 @@ void Inventory::display(){
 
 void Inventory::search(std::string vehType, int optMod){
   
-
-
-
   // checkKeyExists()
   // if(inputModif=="Car"){
   // }
