@@ -39,10 +39,32 @@
    return;
 };
   std::string mod = "hello";
-  void Menu::searchForCar(std::shared_ptr<Inventory> inventory){return;};
+  void Menu::searchForCar(std::shared_ptr<Inventory> inventory, std::string mod){
+    int opt;
+    const int until_break (-1);
+    const int broke(1);
+    std::string q2 = (mod=="car") ? "Number of seats" : "Max engine size";
+    std::string q3 = (mod=="car") ? "Number of doors" : "Two- or -Three-wheeler";
+    std::cout << "Search for a car by:"
+              << "--------------------"
+              << "1) Registration number"
+              << "2) " << q2
+              << "3) " << q3
+              << "9) Return to main menu \n\n";
+    do{
+      std::cout << "Please choose an option: ";
+      std::cin >> opt;
+      if(opt!=1 || opt!=2 || opt!=3 || opt!=9)complain();
+      else break;
+    } while (until_break!=broke);    
+  inventory->search(mod, opt);
+
+    
+             
+};
   void Menu::searchForBike(std::shared_ptr<Inventory> inventory){std::cout << "not implemented\n\n"; return ;}; 
-  void Menu::sortByRegistration(std::shared_ptr<Inventory> inventory) {inventory->sort("reg");};
-  void Menu::sortByCostPerDay(std::shared_ptr<Inventory> inventory) {inventory->sort("costPd");};  
+  // void Menu::sortByRegistration(std::shared_ptr<Inventory> inventory) {inventory->sort("reg");};
+  // void Menu::sortByCostPerDay(std::shared_ptr<Inventory> inventory) {inventory->sort("costPd");};  
   void Menu::exit(std::shared_ptr<Inventory> inventory){
     std::cout << "Are you sure you want to quit? [y/n]\n\n";
     inventory->save();

@@ -21,6 +21,9 @@ public:
   std::string didYouMeanMake(std::string make);
   std::string didYouMeanModel(std::string make, std::string model);
 
+  void search(std::string vehType, int optMod);
+
+
   void search() const; 
    std::vector<std::shared_ptr<Vehicle>>  sort(std::string mod = "0") const;
   // void serialize(std::ostream& file) const;

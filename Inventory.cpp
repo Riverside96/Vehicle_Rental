@@ -16,8 +16,19 @@
 #include <filesystem>
 
 void Inventory::display(){
-  
 }
+
+
+void Inventory::search(std::string vehType, int optMod){
+  
+
+
+
+  // checkKeyExists()
+  // if(inputModif=="Car"){
+  // }
+};
+
 
 void Inventory::remove(std::string regToDelete){
     // auto it = mapVehiclesByReg[regToDelete];
@@ -26,15 +37,10 @@ void Inventory::remove(std::string regToDelete){
     mapVehiclesByReg.erase(regToDelete);
 };
 
-  
   bool Inventory::checkKeyExists(std::string reg) const{
    return (mapVehiclesByReg.contains(reg)) ? 1 : 0; 
 }; 
 
- 
-
-  // ask sir how to handle it not maintaining it's state after leaving following function
-  // it's not destructing as it's displaying. 
   std::vector<std::shared_ptr<Vehicle>>  Inventory::sort(std::string mod) const{
   std::vector<std::shared_ptr<Vehicle>> aux;
   aux.reserve(mapVehiclesByReg.size());
@@ -106,9 +112,6 @@ void Inventory::remove(std::string regToDelete){
   }
   return lowestLeven;
 };
-
-
-
 
   void Inventory::save() const{
    Serializer::serialize(mapVehiclesByReg);
