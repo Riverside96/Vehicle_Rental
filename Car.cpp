@@ -18,6 +18,11 @@ std::string Car::getTypeName() const {
     return "Car";
   }
 
+int Car::getSeats(){return numOfSeats;}
+int Car::getDoors(){return numOfDoors;}
+
+
+
 double Car::costPerDay(){
   int costAsPence = 2500 - (age*150) - (numOfDoors*200);
   return penceToPounds(perDayCostCap(costAsPence));

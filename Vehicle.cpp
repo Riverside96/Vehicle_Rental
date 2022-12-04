@@ -1,6 +1,7 @@
 #include "Car.h"
 #include "dateHelpers.h"
 #include "Vehicle.h"
+#include <iostream>
 
 Vehicle::Vehicle(std::string reg, std::string make, std::string model, std::string dateOfManufacture)
 :reg(reg), make(make), model(model), dateOfManufacture(dateOfManufacture){}
@@ -11,24 +12,35 @@ std::string Vehicle::getModel() const {return model;}
 std::string Vehicle::getDateOfManufacture()const {return dateOfManufacture;}
 
 void Vehicle::initType(){type = "car";}
-//get around not bein able to set value in derived class constructor 
 void Vehicle::initType(int numOfWheels){
-  // if(type != "car"){
     std::string tricOrBic = (numOfWheels == 2) ? "bicicle" : "tricicle";
     type = tricOrBic;
   }
-// }
-//
 // needs to change. If both dates are first of july, 
 // it depends on whether the date of manufacture is before or after
 // first 1st of july
 int Vehicle::getAge(){
-  // int currentYr = dateHelpers::getYear();
-  // int again = currentYr - dateHelpers::getYearFromDateString(dateOfManufacture);\
-  // return again;
   return (dateHelpers::getYear()) - (dateHelpers::getYearFromDateString(dateOfManufacture));
 };
 
-// pass refs in instead
+
+
+void Vehicle::startLease(std::string &fName, std::string &Lname, std::string &address, int contact ){
+  historyList.push_back(HistoryInstance(fName, Lname, address, contact));
+  // for(auto& v : historyList){
+  //   std::cout << v.fName;
+  //   std::cout << v.lName;
+  //   std::cout << v.address;
+  //   std::cout << v.contact;
+
+  // }
+};
+
+void Vehicle::endLease(){
+
+};
+
+
+
 int Vehicle::perDayCostCap(int costPD){costPD = (costPD<1000) ? 1000 : costPD; return costPD;}
 double Vehicle::penceToPounds(int pence){return (double)pence/100;};

@@ -2,6 +2,7 @@
 #include "Bike.h"
 #include "Car.h"
 #include <iostream>
+#include <ostream>
 #include <regex>
 #include "dateHelpers.h"
 #include <memory.h>
@@ -40,29 +41,60 @@
 };
   // std::string mod = "hello";
   void Menu::search(std::shared_ptr<Inventory> inventory, std::string mod){
-    int opt;
-    const int until_break (-1);
-    const int broke(1);
+    int opt(0), optInt(5);
+    std::string answer(""), optStr("");
+
+    bool broke(0);
     std::string q2 = (mod=="car") ? "Number of seats" : "Max engine size";
     std::string q3 = (mod=="car") ? "Number of doors" : "Two- or -Three-wheeler";
-    std::cout << "Search for a car by:"
-              << "--------------------"
-              << "1) Registration number"
-              << "2) " << q2
-              << "3) " << q3
-              << "9) Return to main menu \n\n";
+    std::cout << "Search for a "+mod+" by:\n"
+              << "--------------------\n"
+              << "1) Registration number\n"
+              << "2) " << q2 << "\n"
+              << "3) " << q3 << "\n"
+              << "9) Return to main menu \n\n"<< std::endl;
     do{
       std::cout << "Please choose an option: ";
       std::cin >> opt;
-      if(opt==1 || opt==2 || opt==3 || opt==9) break;
-      else complain();
-    } while (until_break!=broke);    
-  inventory->search(mod, opt);
-
+      if(opt==1 || opt==2 || opt==3 || opt==9) {
+      broke = 1; break;
+    }else complain();
+    } while (!broke);    
+  
+   if(mod=="car"){
+    switch(opt){
+      case 1:
+        std::cout << "\nEnter Registration: ";
+        enterReg(optStr, answer);
+        break;
+      case 2:
+        std::cout << "\nEnter number of seats: ";
+        enterSeats(optInt);
+        break;
+      case 3:
+         std::cout << "\nEnter number of doors: ";
+        enterDoors(optInt);
+        break;
+}
+  } else {
+    switch(opt){
+      case 1:
+        std::cout << "\nEnter registration: ";
+        enterReg(optStr, answer);
+        break;
+      case 2:
+        std::cout <<"Enter max engine size: ";
+        enterEngineSize(optInt);
+        break;
+      case 3:
+        std::cout << "Enter number of wheels: ";
+        enterWheels(optInt);
+        break;
+    }
+  }
+  inventory->search(mod, opt,  optInt, optStr, inventory);
 };
-  // void Menu::searchForBike(std::shared_ptr<Inventory> inventory){std::cout << "not implemented\n\n"; return ;}; 
-  // void Menu::sortByRegistration(std::shared_ptr<Inventory> inventory) {inventory->sort("reg");};
-  // void Menu::sortByCostPerDay(std::shared_ptr<Inventory> inventory) {inventory->sort("costPd");};  
+
   void Menu::exit(std::shared_ptr<Inventory> inventory){
     std::cout << "Are you sure you want to quit? [y/n]\n\n";
     inventory->save();
@@ -139,21 +171,25 @@ std::string Menu::dateIntsToString(int day, int month, int year){
   } while (!broke);   
 };
 
-  void Menu::enterDoors(int &numOfDoors){
+  void Menu::enterDoors(int numOfDoors){
     bool broke(0);
     do {
       std::cin >> numOfDoors;
-      if(numOfDoors == 3 || numOfDoors == 5) broke=1; break;
-      complain();
+      if(numOfDoors == 3 || numOfDoors == 5){
+      broke=1; 
+      break;
+    } else complain();
     } while (!broke);  
 
 };
-  void Menu::enterWheels(int &numOfWheels){
+  void Menu::enterWheels(int numOfWheels){
     bool broke(0); 
     do {
       std::cin >> numOfWheels;
-      if(numOfWheels == 2 || numOfWheels == 3) broke=1; break;
-      complain();
+      if(numOfWheels == 2 || numOfWheels == 3) {
+      broke=1;
+      break;
+    } else complain();
     } while (!broke);  
 };
   void Menu::enterEngineSize(int &engineCC){
@@ -207,7 +243,8 @@ std::string Menu::dateIntsToString(int day, int month, int year){
   do{
     std::cin >> seats;
     if (seats == 2 || seats == 4 || seats == 5){
-      broke=1;;
+      broke=1;
+      break;
     } else complain();
   }while (!broke); 
 };
@@ -218,7 +255,7 @@ std::string Menu::dateIntsToString(int day, int month, int year){
   // const int broke(1);
   std::string answer;
 
-  int numOfWheels, numOfDoors, seats, engineCC;
+  int numOfWheels(0), numOfDoors(0), seats(0), engineCC(0);
   std::string vehicleType, registration, dateOfManufacture, make, model; 
 
   // could add a if b is entered, jump back to last question method later 

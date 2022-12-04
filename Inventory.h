@@ -11,7 +11,7 @@
 #include <list>
 class Inventory{
 public:
-  void display();
+  void display(const std::shared_ptr<Vehicle> &veh, const std::string opt) const;
   void add(std::shared_ptr<Vehicle> v) ;
 
   void addValidModel(std::string make, std::list<std::string> model);
@@ -21,10 +21,15 @@ public:
   std::string didYouMeanMake(std::string make);
   std::string didYouMeanModel(std::string make, std::string model);
 
-  void search(std::string vehType, int optMod);
+  void search(std::string &vehType, int opt, int optModInt, std::string &optModStr, std::shared_ptr<Inventory> inv);
+  
+  void rentalDash(std::string reg, std::shared_ptr<Inventory> inv);
+
+  void rentVehicle(std::string &reg, std::shared_ptr<Inventory> inv);
+  void viewRentals(std::string &reg);
 
 
-  void search() const; 
+  // void search() const; 
    std::vector<std::shared_ptr<Vehicle>>  sort(std::string mod = "0") const;
   // void serialize(std::ostream& file) const;
   void save() const;

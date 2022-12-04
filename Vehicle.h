@@ -1,6 +1,7 @@
 #pragma once
  #include <ostream>
 #include <sstream>
+#include <list>
 class Vehicle {
 
   friend std::ostream& operator<<(std::ostream& os, const Vehicle& v){
@@ -19,13 +20,19 @@ public:
   int getAge();
   virtual std::string getTypeName() const = 0; 
 
-  // static bool compareReg(const Vehicle& lhs, const Vehicle& rhs){
-  //   return lhs.reg < lhs.reg;
-  //   
-  // }
-  // 
+  void startLease(std::string &fName, std::string &Lname, std::string &address, int contact);
+  void endLease();
 
-protected:
+
+    struct HistoryInstance{
+    HistoryInstance(std::string fName, std::string lName, std::string address, int contact);
+    // ~HistoryInstance();
+    std::string leaseStart, leaseEnd, fName, lName, address, contact;
+  };
+
+
+
+ protected:
   virtual void serialize(std::ostream& os) const{
     os << "Registration: " << reg << " "
        << "Make: " << make << " "
@@ -41,12 +48,25 @@ protected:
 
   void initType(int numOfWheels);
   void initType();
+
+
 private:
-  // I think this must be non const to allow for init type func. This breaks encapsulation, how to fix?
   std::string type;
   std::string const reg, make, model, dateOfManufacture;  
-  //char make[];
-};
+  std::list<Vehicle::HistoryInstance> historyList; 
+  
+  // class HistoryInstance{
+  //   public:
+  //     HistoryInstance();
+  //     ~HistoryInstance();
+  //   private:
+  //     std::string leaseStart, leaseEnd, fName, lName, address, contact;
+  //     
+  // struct HistoryInstance{
+  //   HistoryInstance();
+  //   ~HistoryInstance();
+  //   std::string leaseStart, leaseEnd, fName, lName, address, contact;
+  };
 
 // have a map of valid car names, .... did you mean toyota?
 
