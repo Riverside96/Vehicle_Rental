@@ -11,8 +11,13 @@ std::string dateHelpers::getCurrentDate(){
   std::string year = std::to_string(gotTime->tm_year + 1900);
   std::string month = std::to_string(gotTime->tm_mon + 1);
   std::string day = std::to_string(gotTime->tm_mday);
+  
+  std::string prependDay("");
+  std::string prependMonth("");
+  if (stoi(day)<10) {prependDay = "0";}
+  if (stoi(month)<10) {prependMonth = "0";}
 
-  return year+"/"+month+"/"+day;
+  return year+"/"+ prependMonth + month+"/"+ prependDay + day;
 }
 
 
@@ -46,11 +51,10 @@ std::string dateHelpers::getCurrentDate(){
   }
 
   void dateHelpers::strToYYYYMMDD(std::string dateString, int &y, int &m, int &d){
-   
 
    y = stoi(dateString.substr(0, 4));
-   m = stoi(dateString.substr(6, 7));
-   d = stoi(dateString.substr(8, 9));
+   m = stoi(dateString.substr(5, 2));
+   d = stoi(dateString.substr(8, 2));
 }
 
 

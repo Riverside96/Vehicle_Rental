@@ -19,8 +19,6 @@ public:
   virtual std::string getTypeName() const = 0; 
   void startLease(std::string &fName, std::string &Lname, int houseNum, std::string &address, std::string &contact);
   void endLease();
-  void setHasHistory();
-  bool checkHasHistory();
 
  protected:
   virtual void serialize(std::ostream& os) const{
@@ -40,6 +38,5 @@ private:
   std::string type;
   std::string const reg, make, model, dateOfManufacture;  
   std::unique_ptr<HistoryInstance> tempHistoryStore;
-  bool hasHistory=0;
   };
 

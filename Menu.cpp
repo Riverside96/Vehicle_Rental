@@ -118,14 +118,18 @@
   return found;
 };
 
+
 std::string Menu::dateIntsToString(int day, int month, int year){
   std::ostringstream date;
-  date <<day<<"/"<<month<<"/"<<year;
+  std::string prependDay(""), prependMonth("");
+  if (day<10) {prependDay="0";}
+  if (month<10) {prependMonth="0";}
+  date << prependDay <<day<<"/" << prependMonth <<month<<"/"<<year;
   std::string dateString = date.str();
   return dateString;
 }
 
-// to implement when we have hooked up a database to a lookup table
+
 // also implement did you mean 
  bool Menu::checkMakeInDatabase(std::string make){
   return  make == "make" ? 1 : 0;

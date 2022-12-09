@@ -34,5 +34,3 @@ int Vehicle::perDayCostCap(int costPD){costPD = (costPD<1000) ? costPD : 1000; r
 double Vehicle::penceToPounds(int pence){return (double)pence/100;};
 
 
-void Vehicle::setHasHistory(){hasHistory = true;};
-bool Vehicle::checkHasHistory(){return hasHistory;};

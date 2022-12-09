@@ -20,20 +20,32 @@
 #include <filesystem>
 
 
+
+void Inventory::addCurrentlyLeased(std::string &reg){
+  currentlyLeased.insert(reg);
+};
+void Inventory::removeCurrentlyLeased(std::string &reg){
+  currentlyLeased.erase(reg);
+};
+bool Inventory::checkIfCurrentlyLeased(std::string &reg){
+  return currentlyLeased.contains(reg) ? true : false;
+};
+
+
 void Inventory::addHasHistory(std::string &reg){
   hasHistorySet.insert(reg);
 };
-
 void Inventory::printHasHistory(){
   for(auto reg : hasHistorySet){
     std::cout << reg << "\n";
   }
 }
-
+bool Inventory::checkHasHistory(std::string &reg){
+  return hasHistorySet.contains(reg) ? true : false;
+}
 double Inventory::getCostPerDay(std::string &reg){
   return mapVehiclesByReg[reg]->costPerDay();
 }
-
 void Inventory::search(std::string &vehType, int opt, int optInt,std::string &optStr, std::shared_ptr<Inventory> inv) {
   std::vector<std::shared_ptr<Vehicle>> unMap;
   std::vector<std::shared_ptr<Vehicle>> aux;
@@ -118,8 +130,8 @@ void Inventory::search(std::string &vehType, int opt, int optInt,std::string &op
 
   void Inventory::rentalDash(std::string reg, std::shared_ptr<Inventory> inv){
   int totalRentDays(0), totalRentCost(0);
-
-    if(inv->mapVehiclesByReg[reg]->checkHasHistory()){
+    
+    if(checkHasHistory(reg)){
    int storeSize;
    HistoryInstance** historyStore = Serializer::read(reg, storeSize, inv);
    totalRentDays = (*historyStore[0]).getTotalRentalDays();
@@ -136,11 +148,16 @@ void Inventory::search(std::string &vehType, int opt, int optInt,std::string &op
    std::cout << "\nCost Per Day:           £";
    std::cout << mapVehiclesByReg[reg]->costPerDay() << "\n";
 
-   std::cout << "Total Rental Income:     "<<totalRentCost<<"\n";
-   std::cout << "Total Days Rented:       "<<totalRentDays<<"\n";
+   std::cout << "Total Rental Income:    £"<<totalRentCost<<"\n";
+   std::cout << "Total Days Rented:      "<<totalRentDays<<"\n";
   
-  std::cout << "\n\n1) Rent Vehicle\n"
-   << "2) View historic rentals\n"
+  if (!checkIfCurrentlyLeased(reg)){
+  std::cout << "\n\n1) Rent Vehicle\n";
+  } else {
+    std::cout << "\n\n1) End Vehicle Lease\n";
+  }
+
+  std::cout << "2) View historic rentals\n"
    << "9) Return to main menu\n\n"
    << "Please choose an option: ";
 
@@ -161,7 +178,7 @@ void Inventory::search(std::string &vehType, int opt, int optInt,std::string &op
       rentVehicle(reg, inv);
       break;
     case 2:
-      if(inv->mapVehiclesByReg[reg]->checkHasHistory()){
+      if(checkHasHistory(reg)){
       viewRentals(reg, inv);
       } else {
         std::cout << "No history to display. Press any key to return to menu";
@@ -191,7 +208,9 @@ void Inventory::search(std::string &vehType, int opt, int optInt,std::string &op
 
   mapVehiclesByReg[reg]->startLease(fName, lName, houseNum, address, contact);
   hasHistorySet.insert(reg);
+  addCurrentlyLeased(reg);
    Serializer::writeHistorySet(hasHistorySet);
+   Serializer::writeCurrentlyLeasedSet(currentlyLeased);
   // addHasHistory(reg);
 
 
@@ -200,10 +219,6 @@ void Inventory::search(std::string &vehType, int opt, int optInt,std::string &op
     int sizeToSet;
     Serializer::read(reg, sizeToSet, inv);
     
-  
-
-
-
 }
   // use function pointers for this later, perfect excuse
   void Inventory::display(const std::shared_ptr<Vehicle> &veh, const std::string opt) const{

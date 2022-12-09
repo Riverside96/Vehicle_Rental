@@ -16,12 +16,6 @@
 #define MAX_LINES 1000
 
 
-
-
-
-
-
-
 HistoryInstance** Serializer::read(std::string reg, int &nullHistArrSizeToReturn, std::shared_ptr<Inventory> inv){
       // HistoryInstance test;
       // std::list<std::shared_ptr<HistoryInstance>> historyList;
@@ -75,11 +69,20 @@ HistoryInstance** Serializer::read(std::string reg, int &nullHistArrSizeToReturn
         std::cout << leaseEnd << "       ";
 
       //get date difference for each entry & accumulate
-      if(leaseEnd == "NA"){leaseEnd=leaseStart;}
+      if(leaseEnd == "NA"){leaseEnd=dateHelpers::getCurrentDate();}
       int startY, startM, startD;
       int endY, endM, endD;
       dateHelpers::strToYYYYMMDD(leaseStart, startY, startM, startD);
       dateHelpers::strToYYYYMMDD(leaseEnd, endY, endM, endD);
+
+
+      std::cout << "start y: " << startY << "\n";
+      std::cout << "start m: " << startM << "\n";
+      std::cout << "start d: " << startD << "\n";
+      std::cout << "end y: " << endY << "\n";
+      std::cout << "end m: " << endM << "\n";
+      std::cout << "end d: " << endD << "\n";
+
       auto start = std::chrono::year{startY}/startM/startD;
       auto end = std::chrono::year{endY}/endM/endD;
       int rentalDays = (std::chrono::sys_days{end} - std::chrono::sys_days{start}).count();
@@ -90,9 +93,6 @@ HistoryInstance** Serializer::read(std::string reg, int &nullHistArrSizeToReturn
     histInstance.setTotalRentalCost(totalRentDays*(inv->getCostPerDay(reg)));
     dynamicHistoryStore[i] = &histInstance;
     }
-    
-    // dynamicHistoryStore[0]->setTotalRentalDays(totalRentDays);
-   /*  dynamicHistoryStore[0]->setTotalRentalCost(inv->getCostPerDay(reg)); */
     return dynamicHistoryStore;
    }
    return 0;    
@@ -160,13 +160,6 @@ void Serializer::read(std::shared_ptr<Inventory> inventory){
 };
 
 void Serializer::readHistorySet(std::shared_ptr<Inventory> inventory){
-
-
-  
-
-
-
-
   std::string reg, space, reg2, na, complete;
   std::ifstream infile;
   infile.open("data/hasHistory/set.txt");
@@ -178,9 +171,9 @@ void Serializer::readHistorySet(std::shared_ptr<Inventory> inventory){
       std::getline(infile, reg);
       inventory->addHasHistory(reg);
     }while(!infile.eof());
-     
   }
 }
+
 
 void Serializer::writeHistorySet(std::set<std::string> hasHistorySet){
   std::ofstream file;
@@ -189,6 +182,35 @@ void Serializer::writeHistorySet(std::set<std::string> hasHistorySet){
     file << reg << "\n";
   }
 }
+
+void Serializer::writeCurrentlyLeasedSet(std::set<std::string> currentlyLeasedSet){
+  std::ofstream file;
+  file.open("data/currentlyLeased/leased.txt");
+  for (const auto& reg : currentlyLeasedSet){
+    file << reg << "\n";
+  }
+}
+
+
+void Serializer::readCurrentlyLeasedSet(std::shared_ptr<Inventory> inventory){
+  std::string reg, space, reg2, na, complete;
+  std::ifstream infile;
+  infile.open("data/currentlyLeased/leased.txt");
+  if(!infile.is_open()){
+    std::cout << "Database error, contact admin.";
+    return;
+  } else {
+    do {
+      std::getline(infile, reg);
+      inventory->addCurrentlyLeased(reg);
+    }while(!infile.eof());
+  }
+}
+
+
+
+
+
 
 void Serializer::serialize(std::unordered_map<std::string, std::shared_ptr<Vehicle>> mapVehiclesByReg){
   std::ofstream file;

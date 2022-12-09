@@ -25,6 +25,11 @@ public:
 
   void addHasHistory(std::string &reg);
   void printHasHistory();
+  bool checkHasHistory(std::string &reg);
+
+  void addCurrentlyLeased(std::string &reg);
+  void removeCurrentlyLeased(std::string &reg);
+  bool checkIfCurrentlyLeased(std::string &reg);
 
 
   void search(std::string &vehType, int opt, int optModInt, std::string &optModStr, std::shared_ptr<Inventory> inv);
@@ -51,6 +56,7 @@ public:
 private:
   std::unordered_map<std::string, std::shared_ptr<Vehicle>> mapVehiclesByReg;
   std::set<std::string> hasHistorySet;
+  std::set<std::string> currentlyLeased;
   std::map<std::string, std::list<std::string>> mapValidMakesModels;
   std::ofstream file;
   };

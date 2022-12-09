@@ -29,6 +29,7 @@ int main(int argc, char *argv[]) {
   auto inv = std::make_shared<Inventory>();
   Serializer::read(inv);
   Serializer::readHistorySet(inv);
+  Serializer::readCurrentlyLeasedSet(inv);
 
 
   inv->printHasHistory();
