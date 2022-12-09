@@ -12,7 +12,7 @@ class Car: public Vehicle {
 public:
   Car(std::string reg, std::string make, std::string model, std::string dateOfManufacture, int numOfDoors, int numOfSeats) ;
   ~Car();
-  double costPerDay() override; 
+  int costPerDay() override; 
 
   std::string getTypeName() const override;
 

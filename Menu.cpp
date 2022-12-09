@@ -171,7 +171,7 @@ std::string Menu::dateIntsToString(int day, int month, int year){
   } while (!broke);   
 };
 
-  void Menu::enterDoors(int numOfDoors){
+  void Menu::enterDoors(int &numOfDoors){
     bool broke(0);
     do {
       std::cin >> numOfDoors;
@@ -182,7 +182,7 @@ std::string Menu::dateIntsToString(int day, int month, int year){
     } while (!broke);  
 
 };
-  void Menu::enterWheels(int numOfWheels){
+  void Menu::enterWheels(int &numOfWheels){
     bool broke(0); 
     do {
       std::cin >> numOfWheels;

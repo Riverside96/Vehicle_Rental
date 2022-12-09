@@ -1,7 +1,9 @@
 #include "Car.h"
+#include "HistoryInstance.h"
+#include "Serializer.h"
 #include "dateHelpers.h"
 #include "Vehicle.h"
-#include <iostream>
+#include <utility>
 
 Vehicle::Vehicle(std::string reg, std::string make, std::string model, std::string dateOfManufacture)
 :reg(reg), make(make), model(model), dateOfManufacture(dateOfManufacture){}
@@ -22,25 +24,17 @@ void Vehicle::initType(int numOfWheels){
 int Vehicle::getAge(){
   return (dateHelpers::getYear()) - (dateHelpers::getYearFromDateString(dateOfManufacture));
 };
+void Vehicle::startLease(std::string &fName, std::string &Lname, int houseNum, std::string &address, std::string &contact){
 
-
-
-void Vehicle::startLease(std::string &fName, std::string &Lname, std::string &address, int contact ){
-  historyList.push_back(HistoryInstance(fName, Lname, address, contact));
-  // for(auto& v : historyList){
-  //   std::cout << v.fName;
-  //   std::cout << v.lName;
-  //   std::cout << v.address;
-  //   std::cout << v.contact;
-
-  // }
+  Serializer::serialize(std::make_unique<HistoryInstance>(reg, fName, Lname, houseNum, address, contact));
+  hasHistory=true;
+  // std::cout << this->reg;
 };
-
 void Vehicle::endLease(){
-
 };
-
-
-
 int Vehicle::perDayCostCap(int costPD){costPD = (costPD<1000) ? 1000 : costPD; return costPD;}
 double Vehicle::penceToPounds(int pence){return (double)pence/100;};
+
+
+void Vehicle::setHasHistory(){hasHistory = true;};
+bool Vehicle::checkHasHistory(){return hasHistory;};

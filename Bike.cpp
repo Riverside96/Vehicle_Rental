@@ -20,7 +20,7 @@ std::string Bike::getTypeName() const{
   return (numOfWheels == 2) ? "Bike" : "Tricycle";
 }
 
-double Bike::costPerDay (){
+int Bike::costPerDay (){
   int costAsPence = 1500 + (ceil(engineCC/100)*100);
   return penceToPounds(perDayCostCap(costAsPence));
 };

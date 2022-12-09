@@ -16,7 +16,7 @@ public:
 
   int getNumOfWheels();
   int getEngineCC();
-  double costPerDay() override;
+  int costPerDay() override;
 
 
   std::string getTypeName() const override;

@@ -1,6 +1,7 @@
 #include "Inventory.h"
 #include "Bike.h"
 #include "Car.h"
+#include "HistoryInstance.h"
 #include "InputValidators.h"
 #include "Serializer.h"
 #include <algorithm>
@@ -8,9 +9,9 @@
 #include <ios>
 #include <iostream>
 #include <iterator>
-#include <map>
 #include <memory>
 #include <ostream>
+#include <string>
 #include <sys/select.h>
 #include <unistd.h>
 #include <vector> 
@@ -19,16 +20,18 @@
 #include <filesystem>
 
 
+
+
+double Inventory::getCostPerDay(std::string &reg){
+  return mapVehiclesByReg[reg]->costPerDay();
+}
+
 void Inventory::search(std::string &vehType, int opt, int optInt,std::string &optStr, std::shared_ptr<Inventory> inv) {
   std::vector<std::shared_ptr<Vehicle>> unMap;
-
-  
   std::vector<std::shared_ptr<Vehicle>> aux;
   aux.reserve(mapVehiclesByReg.size());
   for (const auto& [k, v] : mapVehiclesByReg){
     if (vehType == "car"){
-      // casting is the issue I think
-      // auto temp = std::dynamic_pointer_cast<Car>(v);
       std::shared_ptr<Car> temp = static_pointer_cast<Car>(v);
       switch (opt){
         case 1:
@@ -40,6 +43,7 @@ void Inventory::search(std::string &vehType, int opt, int optInt,std::string &op
             aux.push_back(v); 
             } break;
         case 3: 
+          std::cout <<  temp->getDoors();
           if (temp->getDoors() == optInt){
             aux.push_back(v);
           } break;
@@ -63,7 +67,12 @@ void Inventory::search(std::string &vehType, int opt, int optInt,std::string &op
     }
   }
 
-  if(!aux.empty()){
+  if(aux.empty()){
+    std::cout << "No matches found\n"
+              << "Press any key to return to main menu";
+    std::cin.ignore();
+    std::cin.get();
+  } else {
     std::cout << "list of cars matching that search:\n\n"
             << "Registration Number   Cost Per Day   Make    Model\n"
             << "-------------------   ------------   ----    -----\n";
@@ -96,29 +105,34 @@ void Inventory::search(std::string &vehType, int opt, int optInt,std::string &op
     std::cout<< "\n\n\n\n\n\n\n\n";
     rentalDash(aux[select-1]->getReg(), inv);
 
-  } else {
-    std::cout << "No matches found\n"
-              << "Press any key to return to main menu";
-    std::cin.ignore();
-    std::cin.get();
-
-
-
-  }
-    
-
+  } 
 };
 
   void Inventory::rentalDash(std::string reg, std::shared_ptr<Inventory> inv){
-   std::cout << "Cost Per Day:           £";
-   display(mapVehiclesByReg[reg], "costPD");
-   std::cout << "\n";
-   std::cout << "Total Rental Income";
-   std::cout << "\n";
-   std::cout << "Total Days Rented\n\n"
+  int totalRentDays(0), totalRentCost(0);
 
-   << "1) Rent Vehicle\n"
-   << "2) View historic rentals"
+    if(inv->mapVehiclesByReg[reg]->checkHasHistory()){
+   int storeSize;
+   HistoryInstance** historyStore = Serializer::read(reg, storeSize, inv);
+   totalRentDays = (*historyStore[0]).getTotalRentalDays();
+   totalRentCost = (*historyStore[0]).getTotalRentalCost();
+    }
+
+
+  
+  std::cout<< "\n\n\n\n\n\n\n\n";
+  std::string title =  reg + ": " + mapVehiclesByReg[reg]->getMake() + " " + mapVehiclesByReg[reg]->getModel();
+  std::cout <<  title << "\n";
+  for(int i = 0; i < title.length(); i++){std::cout << "-";}
+
+   std::cout << "\nCost Per Day:           £";
+   std::cout << mapVehiclesByReg[reg]->costPerDay() << "\n";
+
+   std::cout << "Total Rental Income:     "<<totalRentCost<<"\n";
+   std::cout << "Total Days Rented:       "<<totalRentDays<<"\n";
+  
+  std::cout << "\n\n1) Rent Vehicle\n"
+   << "2) View historic rentals\n"
    << "9) Return to main menu\n\n"
    << "Please choose an option: ";
 
@@ -139,41 +153,49 @@ void Inventory::search(std::string &vehType, int opt, int optInt,std::string &op
       rentVehicle(reg, inv);
       break;
     case 2:
-      viewRentals(reg);
+      if(inv->mapVehiclesByReg[reg]->checkHasHistory()){
+      viewRentals(reg, inv);
+      } else {
+        std::cout << "No history to display. Press any key to return to menu";
+        std::cin.ignore();
+        std::cin.get();
+        return;
+      }
       break;
     case 9:
       return;
   }
-
-
 }
-
-  
   void Inventory::rentVehicle(std::string &reg, std::shared_ptr<Inventory> inv){
-  std::string fName, lName, address; 
-  int contact;
+  std::string fName, lName, address, contact;
+  int houseNum;
   std::cout << "\nEnter customers first name: ";
   std::cin >> fName;
   std::cout << "\nEnter customers last name: "; 
   std::cin >> lName;
-  std::cout <<"\nEnter customers address: ";
-  std::cin >> address;
-  std::cout << "Enter customers contact number: ";
+  std::cout <<"\nEnter house number: ";
+  std::cin >> houseNum;
+  std::cout <<"\nEnter customers address number: ";
+  std::cin.ignore();
+  std::getline(std::cin, address);
+  std::cout << "\nEnter customers contact number: ";
   std::cin >> contact;
+
+
+ 
+  mapVehiclesByReg[reg]->startLease(fName, lName, houseNum, address, contact);
+
+
+  // Serializer::serialize(std::make_unique<HistoryInstance>(reg, fName, Lname, address, contact));
+}
+  void Inventory::viewRentals(std::string &reg, std::shared_ptr<Inventory> inv){
+    int sizeToSet;
+    Serializer::read(reg, sizeToSet, inv);
   
-  mapVehiclesByReg[reg]->startLease(fName, lName, address, contact);
-  
-        
+
+
 
 }
-
-  void Inventory::viewRentals(std::string  &reg){
-  
-}
-
-
-
-
   // use function pointers for this later, perfect excuse
   void Inventory::display(const std::shared_ptr<Vehicle> &veh, const std::string opt) const{
     if (opt == "reg") {std::cout<< veh->getReg();}
@@ -181,8 +203,6 @@ void Inventory::search(std::string &vehType, int opt, int optInt,std::string &op
     if (opt == "make"){std::cout<<veh->getMake();}
     if (opt == "model"){std::cout<< veh->getModel();}
     }
-  
-
   //   std::vector<std::shared_ptr<Vehicle>> filtered;
   // unMap.reserve(mapVehiclesByReg.size());
   //      std::transform(mapVehiclesByReg.begin(), mapVehiclesByReg.end(), std::back_inserter(unMap),
@@ -226,19 +246,13 @@ void Inventory::search(std::string &vehType, int opt, int optInt,std::string &op
   // checkKeyExists()
   // if(inputModif=="Car"){
   // }
-                 
-
 void Inventory::remove(std::string regToDelete){
-    // auto it = mapVehiclesByReg[regToDelete];
-    // if(it->getTypeName() == "Car")
     Serializer::deleteFile(regToDelete);
     mapVehiclesByReg.erase(regToDelete);
 };
-
   bool Inventory::checkKeyExists(std::string reg) const{
    return (mapVehiclesByReg.contains(reg)) ? 1 : 0; 
 }; 
-
   std::vector<std::shared_ptr<Vehicle>>  Inventory::sort(std::string mod) const{
   std::vector<std::shared_ptr<Vehicle>> aux;
   aux.reserve(mapVehiclesByReg.size());
@@ -250,7 +264,6 @@ void Inventory::remove(std::string regToDelete){
   if (mod == "costPD") {std::sort(aux.begin(), aux.end(), compareCostPD);}
   return aux;
     }
-
   void Inventory::displayRegCostPerDayNType(std::vector<std::shared_ptr<Vehicle>> aux) const{
       for (const auto& key : aux) {
       std::cout << key->getReg()
@@ -276,7 +289,6 @@ void Inventory::remove(std::string regToDelete){
     std::cout << "\n";  
   }
 }
-
   bool Inventory::isMakeInMap(std::string make){
     return mapValidMakesModels.contains(make) ? true : false; 
 };
@@ -311,10 +323,6 @@ void Inventory::remove(std::string regToDelete){
   }
   return lowestLeven;
 };
-
   void Inventory::save() const{
    Serializer::serialize(mapVehiclesByReg);
 }; 
-
-
-

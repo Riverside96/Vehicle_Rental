@@ -1,15 +1,35 @@
 #include "Menu.h"
 #include <cstdlib>
 #include <iostream>
+#include <memory>
 #include "Serializer.h"
 #include "Inventory.h"
+#include <ctime>
+#include <string>
+#include "dateHelpers.h"
 void clearScreen(){std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";}
 int main(int argc, char *argv[]) {
+
+
+
+  // std::string testdate = "2012/06/30";
+  // int y, m, d;
+  // dateHelpers::strToYYYYMMDD(testdate, y, m, d) ;
+  // std::cout << "  year: " << y
+  //           << "  month: " << m
+  //           << "  day: " << d
+  //           << "\n";
+
+
+
+  int testStrToChange;
 
 
   // Serializer::deleteFile();
   auto inv = std::make_shared<Inventory>();
   Serializer::read(inv);
+  // Serializer::read("LL00 LLL", testStrToChange, inv);
+  
 
   int option;
   std::string menuMod;

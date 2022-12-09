@@ -5,6 +5,17 @@
 //try to include timeNow at end of regex
 
 
+std::string dateHelpers::getCurrentDate(){
+  time_t test = time(0);
+  tm *gotTime = localtime(&test);
+  std::string year = std::to_string(gotTime->tm_year + 1900);
+  std::string month = std::to_string(gotTime->tm_mon + 1);
+  std::string day = std::to_string(gotTime->tm_mday);
+
+  return year+"/"+month+"/"+day;
+}
+
+
    int dateHelpers::getYear(){
     time_t t = time(NULL);
     tm* timePtr = localtime(&t);
@@ -13,15 +24,6 @@
     return year;
 }
    int dateHelpers::getYearFromDateString(std::string ddmmyyyy){
-
-//std::regex dateValidator ("^[1-31]{1}[/]{1}[1-12]{1}[/]{1}[1-9]{2}$");
-//bool found = regex_match(testing, dateValidator);
-//return (found) ? 2 : 3;
-  //string testing = ("1/7/1996");
-  //
-  // string extractDate = ddmmyyyy.substr(4,  7);
-  // int output = stoi(extractDate);
-  // return output;
 
   int extractYearAsInt = stoi(ddmmyyyy.substr(4, 7));
   return extractYearAsInt;
@@ -42,6 +44,14 @@
     if ((m==2) && (d==29) && (y%4==0)) return 0;
     return true;
   }
+
+  void dateHelpers::strToYYYYMMDD(std::string dateString, int &y, int &m, int &d){
+   
+
+   y = stoi(dateString.substr(0, 4));
+   m = stoi(dateString.substr(6, 7));
+   d = stoi(dateString.substr(8, 9));
+}
 
 
 

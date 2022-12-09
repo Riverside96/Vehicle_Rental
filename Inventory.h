@@ -20,13 +20,14 @@ public:
   bool isModelInMap(std::string make, std::string model);
   std::string didYouMeanMake(std::string make);
   std::string didYouMeanModel(std::string make, std::string model);
+  double getCostPerDay(std::string &reg);
 
   void search(std::string &vehType, int opt, int optModInt, std::string &optModStr, std::shared_ptr<Inventory> inv);
   
   void rentalDash(std::string reg, std::shared_ptr<Inventory> inv);
 
   void rentVehicle(std::string &reg, std::shared_ptr<Inventory> inv);
-  void viewRentals(std::string &reg);
+  void viewRentals(std::string &reg, std::shared_ptr<Inventory> inv);
 
 
   // void search() const; 

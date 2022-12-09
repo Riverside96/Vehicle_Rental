@@ -2,14 +2,99 @@
 #include "Bike.h"
 #include "Car.h"
 #include "Inventory.h"
+#include <bits/chrono.h>
 #include <dirent.h>
 #include <iostream>
+#include <list>
 #include <memory>
+#include <sstream>
 #include <string>
 #include <fstream>
+#include "HistoryInstance.h"
+#include "dateHelpers.h"
+#include <chrono>
+#define MAX_LINES 1000
+
+
+
+HistoryInstance** Serializer::read(std::string reg, int &nullHistArrSizeToReturn, std::shared_ptr<Inventory> inv){
+      // HistoryInstance test;
+      // std::list<std::shared_ptr<HistoryInstance>> historyList;
+      
+      HistoryInstance** fileFailReturn = new HistoryInstance*[0];
+      std::string fName, lName, address, contact, na, temp;
+      std::string leaseStart, leaseEnd;
+      int houseNum=0;
+      // std::chrono::sys_days totalRentalDays;
+      int totalRentDays=0;
+      int totalRentalIncome=0;
+      bool failed;
+      
+      
+      std::string array[MAX_LINES];
+
+  
+        std::ifstream infile;
+        infile.open("data/history/"+reg+".his");
+        if (infile.fail()){
+          std::cout << "This vehicle has no history/file failed to open" << std::endl;
+          bool failed = true;
+          return fileFailReturn;
+       } else {
+          if (failed==true){return fileFailReturn;}
+          int lines(0);
+          while(!infile.eof()){
+            std::getline(infile, array[lines]);
+            lines++;
+            
+            if (lines==MAX_LINES){
+              std::cout << "Storage maxed" << std::endl; break;
+      }
+      } 
+      nullHistArrSizeToReturn = lines-1;   // -1?
+      infile.close();
+
+      HistoryInstance** dynamicHistoryStore = new HistoryInstance*[lines-1];
+
+      for(int i = 0; i<lines-1; i++){
+
+
+        std::istringstream iss(array[i]);
+        std::string temp;
+        iss >> fName >> lName >> houseNum 
+        >> temp >> address 
+        >> contact >> leaseStart >> leaseEnd;
+        address = temp + " " + address;  
+
+        std::cout << leaseStart << "      ";
+        std::cout << leaseEnd << "       ";
+
+      //get date difference for each entry & accumulate
+      if(leaseEnd == "NA"){leaseEnd=leaseStart;}
+      int startY, startM, startD;
+      int endY, endM, endD;
+      dateHelpers::strToYYYYMMDD(leaseStart, startY, startM, startD);
+      dateHelpers::strToYYYYMMDD(leaseEnd, endY, endM, endD);
+      auto start = std::chrono::year{startY}/startM/startD;
+      auto end = std::chrono::year{endY}/endM/endD;
+      int rentalDays = (std::chrono::sys_days{end} - std::chrono::sys_days{start}).count();
+      totalRentDays += rentalDays;
+    
+    auto histInstance = HistoryInstance(reg, fName, lName, houseNum, address, contact, leaseStart, leaseEnd);
+    histInstance.setTotalRentalDays(totalRentDays);
+    histInstance.setTotalRentalCost(totalRentDays*(inv->getCostPerDay(reg)));
+    dynamicHistoryStore[i] = &histInstance;
+    }
+    
+    // dynamicHistoryStore[0]->setTotalRentalDays(totalRentDays);
+   /*  dynamicHistoryStore[0]->setTotalRentalCost(inv->getCostPerDay(reg)); */
+    return dynamicHistoryStore;
+   }
+   return 0;    
+  }
+
+
 void Serializer::read(std::shared_ptr<Inventory> inventory){
-
-
   std::list<std::string> t;
     t.emplace_back("Vectra");
     t.emplace_back("Astra");
@@ -79,6 +164,25 @@ void Serializer::serialize(std::unordered_map<std::string, std::shared_ptr<Vehic
     file.close();
   }
 }
+
+//first deserialize last line. Check if LeaseEnd = ""
+//if so output this car is currently on loan
+//otherwise go to last line & serialize AFTER the last line
+
+void Serializer::serialize(std::unique_ptr<HistoryInstance> historyinstance){
+  
+  
+  
+  std::string lastLine;
+  std::ofstream file;
+    file.open("data/history/"+historyinstance->getReg()+".his");
+    file << *historyinstance; 
+    file << *historyinstance; 
+    file.close();
+  }
+
+
+
 
 // void Serializer::deleteFile(std::string dir, std::string file, std::string ext){
 void Serializer::deleteFile(std::string file){
