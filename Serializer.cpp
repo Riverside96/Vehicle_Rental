@@ -17,6 +17,11 @@
 
 
 
+
+
+
+
+
 HistoryInstance** Serializer::read(std::string reg, int &nullHistArrSizeToReturn, std::shared_ptr<Inventory> inv){
       // HistoryInstance test;
       // std::list<std::shared_ptr<HistoryInstance>> historyList;
@@ -152,7 +157,38 @@ void Serializer::read(std::shared_ptr<Inventory> inventory){
     }
   }
   closedir(directory);
-} ;
+};
+
+void Serializer::readHistorySet(std::shared_ptr<Inventory> inventory){
+
+
+  
+
+
+
+
+  std::string reg, space, reg2, na, complete;
+  std::ifstream infile;
+  infile.open("data/hasHistory/set.txt");
+  if(!infile.is_open()){
+    std::cout << "Database error, contact admin.";
+    return;
+  } else {
+    do {
+      std::getline(infile, reg);
+      inventory->addHasHistory(reg);
+    }while(!infile.eof());
+     
+  }
+}
+
+void Serializer::writeHistorySet(std::set<std::string> hasHistorySet){
+  std::ofstream file;
+  file.open("data/hasHistory/set.txt");
+  for (const auto& reg : hasHistorySet){
+    file << reg << "\n";
+  }
+}
 
 void Serializer::serialize(std::unordered_map<std::string, std::shared_ptr<Vehicle>> mapVehiclesByReg){
   std::ofstream file;
@@ -171,17 +207,12 @@ void Serializer::serialize(std::unordered_map<std::string, std::shared_ptr<Vehic
 
 void Serializer::serialize(std::unique_ptr<HistoryInstance> historyinstance){
   
-  
-  
   std::string lastLine;
   std::ofstream file;
     file.open("data/history/"+historyinstance->getReg()+".his");
     file << *historyinstance; 
-    file << *historyinstance; 
     file.close();
   }
-
-
 
 
 // void Serializer::deleteFile(std::string dir, std::string file, std::string ext){

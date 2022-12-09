@@ -28,6 +28,19 @@ int main(int argc, char *argv[]) {
   // Serializer::deleteFile();
   auto inv = std::make_shared<Inventory>();
   Serializer::read(inv);
+  Serializer::readHistorySet(inv);
+
+
+  inv->printHasHistory();
+  //
+  
+  // std::string testing = ("TT00 TTT");
+  // std::string testing2 = ("MM00 MMM");
+  // std::string testing3 = ("RR00 RRR");
+  // inv->addHasHistory(testing);
+  // inv->addHasHistory(testing2);
+  // inv->addHasHistory(testing3);
+
   // Serializer::read("LL00 LLL", testStrToChange, inv);
   
 

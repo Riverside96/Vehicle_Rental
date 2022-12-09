@@ -20,7 +20,15 @@
 #include <filesystem>
 
 
+void Inventory::addHasHistory(std::string &reg){
+  hasHistorySet.insert(reg);
+};
 
+void Inventory::printHasHistory(){
+  for(auto reg : hasHistorySet){
+    std::cout << reg << "\n";
+  }
+}
 
 double Inventory::getCostPerDay(std::string &reg){
   return mapVehiclesByReg[reg]->costPerDay();
@@ -181,16 +189,17 @@ void Inventory::search(std::string &vehType, int opt, int optInt,std::string &op
   std::cout << "\nEnter customers contact number: ";
   std::cin >> contact;
 
-
- 
   mapVehiclesByReg[reg]->startLease(fName, lName, houseNum, address, contact);
+  hasHistorySet.insert(reg);
+   Serializer::writeHistorySet(hasHistorySet);
+  // addHasHistory(reg);
 
 
-  // Serializer::serialize(std::make_unique<HistoryInstance>(reg, fName, Lname, address, contact));
 }
   void Inventory::viewRentals(std::string &reg, std::shared_ptr<Inventory> inv){
     int sizeToSet;
     Serializer::read(reg, sizeToSet, inv);
+    
   
 
 
@@ -325,4 +334,5 @@ void Inventory::remove(std::string regToDelete){
 };
   void Inventory::save() const{
    Serializer::serialize(mapVehiclesByReg);
+   // Serializer::writeHistorySet(hasHistorySet);
 }; 

@@ -9,6 +9,7 @@
 #include <memory>
 #include <vector>
 #include <list>
+#include <set>
 class Inventory{
 public:
   void display(const std::shared_ptr<Vehicle> &veh, const std::string opt) const;
@@ -21,6 +22,10 @@ public:
   std::string didYouMeanMake(std::string make);
   std::string didYouMeanModel(std::string make, std::string model);
   double getCostPerDay(std::string &reg);
+
+  void addHasHistory(std::string &reg);
+  void printHasHistory();
+
 
   void search(std::string &vehType, int opt, int optModInt, std::string &optModStr, std::shared_ptr<Inventory> inv);
   
@@ -45,6 +50,7 @@ public:
   void displayRegCostPerDayNType(std::vector<std::shared_ptr<Vehicle>> aux) const;
 private:
   std::unordered_map<std::string, std::shared_ptr<Vehicle>> mapVehiclesByReg;
+  std::set<std::string> hasHistorySet;
   std::map<std::string, std::list<std::string>> mapValidMakesModels;
   std::ofstream file;
   };
