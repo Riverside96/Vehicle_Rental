@@ -37,6 +37,6 @@ private:
 
   std::string type;
   std::string const reg, make, model, dateOfManufacture;  
-  std::unique_ptr<HistoryInstance> tempHistoryStore;
+  std::shared_ptr<HistoryInstance> tempHistoryStore;
   };
 

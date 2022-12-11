@@ -30,14 +30,14 @@ public:
   void addCurrentlyLeased(std::string &reg);
   void removeCurrentlyLeased(std::string &reg);
   bool checkIfCurrentlyLeased(std::string &reg);
-
+  void unRentVehicle(std::string &reg, std::shared_ptr<Inventory> inv);
 
   void search(std::string &vehType, int opt, int optModInt, std::string &optModStr, std::shared_ptr<Inventory> inv);
   
   void rentalDash(std::string reg, std::shared_ptr<Inventory> inv);
 
   void rentVehicle(std::string &reg, std::shared_ptr<Inventory> inv);
-  void viewRentals(std::string &reg, std::shared_ptr<Inventory> inv);
+  void viewRentals(std::string &reg, std::shared_ptr<Inventory> inv, bool &stopCall);
 
 
   // void search() const; 

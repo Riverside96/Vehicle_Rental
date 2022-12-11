@@ -19,6 +19,12 @@ HistoryInstance::HistoryInstance(std::string reg, std::string &fName, std::strin
   int HistoryInstance::getTotalRentalDays(){return totalRentalDays;}
   double HistoryInstance::getTotalRentalCost(){return totalRentalCost;}
 
+  std::string HistoryInstance::getLeaseStart(){return leaseStart;};
+  std::string HistoryInstance::getLeaseEnd(){return leaseEnd;};
+  std::string HistoryInstance::getName(){return fName+" "+lName;};
+  std::string HistoryInstance::getAddress(){return address;};
+  std::string HistoryInstance::getContact(){return contact;};
+  
 
 
 std::string HistoryInstance::getReg(){return reg;};

@@ -15,7 +15,12 @@ class HistoryInstance{
     int getTotalRentalDays();
     double getTotalRentalCost();
     
-
+    std::string getLeaseStart();
+    std::string getLeaseEnd();
+    std::string getName();
+    std::string getAddress();
+    std::string getContact();
+    // std::string rentalTermDays();
 
     private:
       int houseNum;

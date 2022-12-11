@@ -5,8 +5,11 @@
 class Serializer{
 public:
   static void serialize(std::unordered_map<std::string, std::shared_ptr<Vehicle>> mapVehiclesByReg);
-  static void serialize(std::unique_ptr<HistoryInstance> historyinstance); 
+  static void serialize(std::shared_ptr<HistoryInstance> historyinstance); 
   static void read(std::shared_ptr<Inventory> inventory);
+
+
+  static void setLeaseEndDate(std::string reg);
 
   static void readHistorySet(std::shared_ptr<Inventory> inventory);
   static void writeHistorySet(std::set<std::string> hasHistorySet);

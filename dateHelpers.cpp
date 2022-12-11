@@ -1,9 +1,21 @@
 #include "dateHelpers.h"
+#include <chrono>
 #include <ctime>
 #include <string>
 
 //try to include timeNow at end of regex
 
+
+int dateHelpers::dateDifference(std::string &startDate, std::string &endDate){
+      int startY, startM, startD;
+      int endY, endM, endD;
+      dateHelpers::strToYYYYMMDD(startDate, startY, startM, startD);
+      dateHelpers::strToYYYYMMDD(endDate, endY, endM, endD);
+      auto start = std::chrono::year{startY}/startM/startD;
+      auto end = std::chrono::year{endY}/endM/endD;
+      return (std::chrono::sys_days{end} - std::chrono::sys_days{start}).count();
+
+};
 
 std::string dateHelpers::getCurrentDate(){
   time_t test = time(0);
@@ -54,7 +66,7 @@ std::string dateHelpers::getCurrentDate(){
 
    y = stoi(dateString.substr(0, 4));
    m = stoi(dateString.substr(5, 2));
-   d = stoi(dateString.substr(8, 2));
+   d = stoi(dateString.substr(8, 3));
 }
 
 

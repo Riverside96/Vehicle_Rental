@@ -4,6 +4,7 @@
 #include "Inventory.h"
 #include <bits/chrono.h>
 #include <dirent.h>
+#include <ios>
 #include <iostream>
 #include <list>
 #include <memory>
@@ -13,26 +14,19 @@
 #include "HistoryInstance.h"
 #include "dateHelpers.h"
 #include <chrono>
+#include <filesystem>
 #define MAX_LINES 1000
 
-
 HistoryInstance** Serializer::read(std::string reg, int &nullHistArrSizeToReturn, std::shared_ptr<Inventory> inv){
-      // HistoryInstance test;
-      // std::list<std::shared_ptr<HistoryInstance>> historyList;
-      
       HistoryInstance** fileFailReturn = new HistoryInstance*[0];
       std::string fName, lName, address, contact, na, temp;
       std::string leaseStart, leaseEnd;
       int houseNum=0;
-      // std::chrono::sys_days totalRentalDays;
       int totalRentDays=0;
-      int totalRentalIncome=0;
-      bool failed;
-      
+      bool failed(0);
       
       std::string array[MAX_LINES];
 
-  
         std::ifstream infile;
         infile.open("data/history/"+reg+".his");
         if (infile.fail()){
@@ -56,8 +50,6 @@ HistoryInstance** Serializer::read(std::string reg, int &nullHistArrSizeToReturn
       HistoryInstance** dynamicHistoryStore = new HistoryInstance*[lines-1];
 
       for(int i = 0; i<lines-1; i++){
-
-
         std::istringstream iss(array[i]);
         std::string temp;
         iss >> fName >> lName >> houseNum 
@@ -65,39 +57,19 @@ HistoryInstance** Serializer::read(std::string reg, int &nullHistArrSizeToReturn
         >> contact >> leaseStart >> leaseEnd;
         address = temp + " " + address;  
 
-        std::cout << leaseStart << "      ";
-        std::cout << leaseEnd << "       ";
-
-      //get date difference for each entry & accumulate
-      if(leaseEnd == "NA"){leaseEnd=dateHelpers::getCurrentDate();}
-      int startY, startM, startD;
-      int endY, endM, endD;
-      dateHelpers::strToYYYYMMDD(leaseStart, startY, startM, startD);
-      dateHelpers::strToYYYYMMDD(leaseEnd, endY, endM, endD);
-
-
-      std::cout << "start y: " << startY << "\n";
-      std::cout << "start m: " << startM << "\n";
-      std::cout << "start d: " << startD << "\n";
-      std::cout << "end y: " << endY << "\n";
-      std::cout << "end m: " << endM << "\n";
-      std::cout << "end d: " << endD << "\n";
-
-      auto start = std::chrono::year{startY}/startM/startD;
-      auto end = std::chrono::year{endY}/endM/endD;
-      int rentalDays = (std::chrono::sys_days{end} - std::chrono::sys_days{start}).count();
-      totalRentDays += rentalDays;
+      
+      if(leaseEnd == "NA"){leaseEnd=dateHelpers::getCurrentDate();}   
+      totalRentDays += dateHelpers::dateDifference(leaseStart, leaseEnd);
     
-    auto histInstance = HistoryInstance(reg, fName, lName, houseNum, address, contact, leaseStart, leaseEnd);
-    histInstance.setTotalRentalDays(totalRentDays);
-    histInstance.setTotalRentalCost(totalRentDays*(inv->getCostPerDay(reg)));
-    dynamicHistoryStore[i] = &histInstance;
+    auto histInstance = new HistoryInstance(reg, fName, lName, houseNum, address, contact, leaseStart, leaseEnd);
+    histInstance->setTotalRentalDays(totalRentDays);
+    histInstance->setTotalRentalCost(totalRentDays*(inv->getCostPerDay(reg)));
+    dynamicHistoryStore[i] = histInstance;
     }
     return dynamicHistoryStore;
    }
    return 0;    
   }
-
 
 void Serializer::read(std::shared_ptr<Inventory> inventory){
   std::list<std::string> t;
@@ -174,7 +146,6 @@ void Serializer::readHistorySet(std::shared_ptr<Inventory> inventory){
   }
 }
 
-
 void Serializer::writeHistorySet(std::set<std::string> hasHistorySet){
   std::ofstream file;
   file.open("data/hasHistory/set.txt");
@@ -191,7 +162,6 @@ void Serializer::writeCurrentlyLeasedSet(std::set<std::string> currentlyLeasedSe
   }
 }
 
-
 void Serializer::readCurrentlyLeasedSet(std::shared_ptr<Inventory> inventory){
   std::string reg, space, reg2, na, complete;
   std::ifstream infile;
@@ -207,10 +177,26 @@ void Serializer::readCurrentlyLeasedSet(std::shared_ptr<Inventory> inventory){
   }
 }
 
+void Serializer::setLeaseEndDate(std::string reg){
+    std::string toReplace("NA");
+    std::string replaceWith = dateHelpers::getCurrentDate();
 
+    std::ifstream fileIn("data/history/"+reg+".his");
+    std::ofstream fileOut("data/history/temp.txt");
+    std::string strTemp;
+    while (fileIn >> strTemp){
+      if (strTemp == toReplace){
+        strTemp = replaceWith;
+    } strTemp += " ";
+      fileOut << strTemp; 
+  }
+  fileIn.close();
+  fileOut.close();
 
-
-
+  std::string toDelete ("data/history/"+reg+".his");
+  std::remove((toDelete).c_str());
+  std::filesystem::rename("data/history/temp.txt", "data/history/"+reg+".his");
+  }
 
 void Serializer::serialize(std::unordered_map<std::string, std::shared_ptr<Vehicle>> mapVehiclesByReg){
   std::ofstream file;
@@ -223,12 +209,7 @@ void Serializer::serialize(std::unordered_map<std::string, std::shared_ptr<Vehic
   }
 }
 
-//first deserialize last line. Check if LeaseEnd = ""
-//if so output this car is currently on loan
-//otherwise go to last line & serialize AFTER the last line
-
-void Serializer::serialize(std::unique_ptr<HistoryInstance> historyinstance){
-  
+void Serializer::serialize(std::shared_ptr<HistoryInstance> historyinstance){
   std::string lastLine;
   std::ofstream file;
     file.open("data/history/"+historyinstance->getReg()+".his");
@@ -236,8 +217,6 @@ void Serializer::serialize(std::unique_ptr<HistoryInstance> historyinstance){
     file.close();
   }
 
-
-// void Serializer::deleteFile(std::string dir, std::string file, std::string ext){
 void Serializer::deleteFile(std::string file){
   std::string dir = "data/";
   std::string ext = ".dat";

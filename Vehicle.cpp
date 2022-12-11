@@ -25,7 +25,7 @@ int Vehicle::getAge(){
   return (dateHelpers::getYear()) - (dateHelpers::getYearFromDateString(dateOfManufacture));
 };
 void Vehicle::startLease(std::string &fName, std::string &Lname, int houseNum, std::string &address, std::string &contact){
-  Serializer::serialize(std::make_unique<HistoryInstance>(reg, fName, Lname, houseNum, address, contact));
+  Serializer::serialize(std::make_shared<HistoryInstance>(reg, fName, Lname, houseNum, address, contact));
   // std::cout << this->reg;
 };
 void Vehicle::endLease(){

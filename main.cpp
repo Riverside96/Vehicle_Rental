@@ -11,39 +11,27 @@ void clearScreen(){std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";}
 int main(int argc, char *argv[]) {
 
 
+  // std::cout << dateHelpers::getCurrentDate();
+  
+  std::string testString = ("AA00 AAA");
+  // Serializer::setLeaseEndDate(testString);
 
-  // std::string testdate = "2012/06/30";
-  // int y, m, d;
-  // dateHelpers::strToYYYYMMDD(testdate, y, m, d) ;
-  // std::cout << "  year: " << y
-  //           << "  month: " << m
-  //           << "  day: " << d
-  //           << "\n";
+  // std::cout << "To start today, make serialize write to the end of the file rather than overwriting"
+  //           << "Also make sure when we unRent(inv.cpp), that we alter NA to be todays date, function ready"
+  //           << "Then get the rest of things up & running. Then we can spend the next few days fixing up add chars" 
+  //           << "and dodgy functionality. Doable if we keep at it though. Keep her rolling, it's not that far off. "
+  //           << "you're getting better for sure. That's what's important. We'll get there eventually in the long run"
+  //           << "Take a deep breath & get grinding";
 
 
 
-  int testStrToChange;
-
-
-  // Serializer::deleteFile();
   auto inv = std::make_shared<Inventory>();
+
   Serializer::read(inv);
   Serializer::readHistorySet(inv);
   Serializer::readCurrentlyLeasedSet(inv);
 
 
-  inv->printHasHistory();
-  //
-  
-  // std::string testing = ("TT00 TTT");
-  // std::string testing2 = ("MM00 MMM");
-  // std::string testing3 = ("RR00 RRR");
-  // inv->addHasHistory(testing);
-  // inv->addHasHistory(testing2);
-  // inv->addHasHistory(testing3);
-
-  // Serializer::read("LL00 LLL", testStrToChange, inv);
-  
 
   int option;
   std::string menuMod;

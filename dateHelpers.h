@@ -2,10 +2,10 @@
 
 #include <string>
 class dateHelpers{
-
+//this could be a struct
 public:
 
-
+  static int dateDifference(std::string &startDate, std::string &endDate);
   static std::string getCurrentDate();
   static int getYear();
   static int getYearFromDateString(std::string ddmmyyy);
