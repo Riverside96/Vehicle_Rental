@@ -14,6 +14,8 @@ public:
   static void enterWheels(int &numOfWheels);
   static void enterEngineSize(int &engineCC);
   static void enterMake(std::string &make, auto &inventory, std::string &answer);
+  static void enterMake(char* make, auto &inventory, std::string &answer);
+
   static void enterModel(std::string &make, std::string &model, std::string &answer, auto &inventory);
   static void enterSeats(int &seats);
 

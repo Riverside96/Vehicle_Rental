@@ -3,6 +3,7 @@
 #include "Car.h"
 #include <iostream>
 #include <ostream>
+#include <cstring>
 #include <regex>
 #include "dateHelpers.h"
 #include <memory.h>
@@ -17,6 +18,31 @@
          << "6) Sort By Cost Per Day\n"
          << "9) Exit\n";
 };
+
+
+static inline char* getUserInputCString(char* output, std::string &input)
+{
+    // Get the user input
+    // std::getline(std::cin, input);
+
+    // Create a new char array with the same length as the user input
+    output = new char[input.length() + 1];
+
+    // Copy the user input into the char array
+    // find the _s (safe alts)
+    strcpy(output, input.c_str());
+
+    // Return the char array
+    return output;
+}
+
+static inline void cleanCString(char* input){
+ delete[] input;
+ input = nullptr;
+}
+
+
+
   void Menu::removeVehicle(std::shared_ptr<Inventory> inventory){
    std::cin.ignore();
    std::string regToDelete;
@@ -253,6 +279,33 @@ std::string Menu::dateIntsToString(int day, int month, int year){
   }while (!broke); 
 };
 
+
+
+  void Menu::enterMake(char* make, auto &inventory, std::string &answer){
+    bool broke(0);
+    do {
+
+      std::string makeString;
+      std::cin >> makeString;
+      if (inventory->isMakeInMap(makeString)) {
+        getUserInputCString(make, makeString);    
+        break;
+    } else {
+          makeString = inventory->didYouMeanMake(makeString);
+          std::cout << "Did you mean " << makeString << "? [y/n]: ";
+          std::cin >> answer;
+          if(!isDeciderValid(answer)) complain();
+          if(answer=="y") 
+            getUserInputCString(make, makeString);
+            broke=1;
+            break;
+        }
+  } while (!broke);
+};
+
+
+
+
   void Menu::addVehicle(std::shared_ptr<Inventory> inventory){
   std::cin.ignore();
   // const int until_break (-1);
@@ -261,6 +314,7 @@ std::string Menu::dateIntsToString(int day, int month, int year){
 
   int numOfWheels(0), numOfDoors(0), seats(0), engineCC(0);
   std::string vehicleType, registration, dateOfManufacture, make, model; 
+  char* mk = nullptr;
 
   // could add a if b is entered, jump back to last question method later 
   std::cout << "\n\nYou may now enter the vehicle details\n";
@@ -291,8 +345,11 @@ std::string Menu::dateIntsToString(int day, int month, int year){
     std::cout << "Engine Size?" <<std::endl;
     enterEngineSize(engineCC);
   }
-  std::cout << "Make of the Vehicle? [DD/MM/YYYY]" << std::endl;
+  std::cout << "Make of the Vehicle?" << std::endl;
   enterMake(make, inventory, answer);
+
+  std::cout << "Mk of the Vehicle?" << std::endl;
+  enterMake(mk, inventory, answer);
 
   std::cout << "Model of the Vehicle? [DD/MM/YYYY]" << std::endl;\
   enterModel(make, model, answer, inventory);
@@ -307,5 +364,10 @@ std::string Menu::dateIntsToString(int day, int month, int year){
   if (vehicleType == "Motorcycle"){
     inventory->add(make_unique<Bike>(registration, make, model, dateOfManufacture, numOfWheels, engineCC));
     }
+
+  cleanCString(mk);
   return;
   }
+
+
+

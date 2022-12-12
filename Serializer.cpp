@@ -66,6 +66,7 @@ HistoryInstance** Serializer::read(std::string reg, int &nullHistArrSizeToReturn
     histInstance->setTotalRentalCost(totalRentDays*(inv->getCostPerDay(reg)));
     dynamicHistoryStore[i] = histInstance;
     }
+
     return dynamicHistoryStore;
    }
    return 0;    
@@ -91,22 +92,20 @@ void Serializer::read(std::shared_ptr<Inventory> inventory){
     inventory->addValidModel("VW",temp3);
   
 
-  std::string vehicleType, registration, make, model, manufactured, na, temp;
+
+  std::string vehicleType, registration, make, model, manufactured, na, temp, fileName;
   int seats, doors, numOfWheels, engineCC;
 
-   std::string fileName;
-    std::ifstream infile;
-    DIR* directory;
-    struct dirent *entry;
-    directory = opendir("./data");
-    if (directory == NULL){
-      std::cout << "Error opening database, please contact administrator";
-  }
-    while ((entry = readdir(directory)) != NULL){
-      // if file not parent dir
-      if (entry->d_type == DT_REG){
-        fileName = entry->d_name;
-
+ // open directory
+  DIR *dir; 
+  struct dirent *entry;
+  if((dir = opendir("./data")) != NULL){
+    //loop through each file
+    while((entry = readdir(dir)) != NULL) {
+      //make sure file ! dir
+      if (entry->d_type == DT_REG) {
+        //open file
+         fileName = entry->d_name;
         std::ifstream infile;
         infile.open("data/"+fileName);
         if (infile.is_open()){
@@ -125,11 +124,14 @@ void Serializer::read(std::shared_ptr<Inventory> inventory){
             infile >> engineCC;
             inventory->add(std::make_unique<Bike>(registration, make, model, manufactured, numOfWheels, engineCC));
         }
+        }
       }
     }
+    closedir(dir);
+  } else {
+    std::cout << "Failed to open database, please contact system admin";
   }
-  closedir(directory);
-};
+}
 
 void Serializer::readHistorySet(std::shared_ptr<Inventory> inventory){
   std::string reg, space, reg2, na, complete;
